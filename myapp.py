@@ -26,48 +26,48 @@ def main():
     #     st.subheader(dicti[str(class_res)])
     #     #write
 
-def process(story):
-    bert, classif,tokenizer = load_components()
-    pred_cl=pred(bert, classif,story,tokenizer)
-    return pred_cl.item()
-
-
-class Net(nn.Module):
-    def __init__(self, num_feature):
-        super(Net, self).__init__()
-        self.layer_1 = nn.Linear(num_feature, 128)
-        self.layer_2 = nn.Linear(128, 8)
-        self.relu = nn.ReLU()
-
-    def forward(self, x):
-        x = self.layer_1(x)
-        x = self.relu(x)
-        x = self.layer_2(x)
-        return x
-
-@st.cache(allow_output_mutation=True)
-def load_components():
-    tokenizer = AutoTokenizer.from_pretrained("DeepPavlov/rubert-base-cased-sentence")
-    model = AutoModel.from_pretrained("DeepPavlov/rubert-base-cased-sentence")
-    model_new=Net(768)
-    model_new.load_state_dict(torch.load('model',map_location=torch.device('cpu')) )
-    model_new.eval()
-    return model,model_new,tokenizer
-
-
-
-def pred(model,model_new,x,tokenizer):
-    pt_batch = tokenizer(
-    x,
-    padding=True,
-    truncation=True,
-    return_tensors="pt")
-
-    pt_outputs = model(**pt_batch)
-    out=model_new(pt_outputs[1])
-    cc=torch.log_softmax(out,dim = 1)
-    _, y_pred_tags = torch.max(cc, dim = 1)
-    return y_pred_tags
+# def process(story):
+#     bert, classif,tokenizer = load_components()
+#     pred_cl=pred(bert, classif,story,tokenizer)
+#     return pred_cl.item()
+#
+#
+# class Net(nn.Module):
+#     def __init__(self, num_feature):
+#         super(Net, self).__init__()
+#         self.layer_1 = nn.Linear(num_feature, 128)
+#         self.layer_2 = nn.Linear(128, 8)
+#         self.relu = nn.ReLU()
+#
+#     def forward(self, x):
+#         x = self.layer_1(x)
+#         x = self.relu(x)
+#         x = self.layer_2(x)
+#         return x
+#
+# @st.cache(allow_output_mutation=True)
+# def load_components():
+#     tokenizer = AutoTokenizer.from_pretrained("DeepPavlov/rubert-base-cased-sentence")
+#     model = AutoModel.from_pretrained("DeepPavlov/rubert-base-cased-sentence")
+#     model_new=Net(768)
+#     model_new.load_state_dict(torch.load('model',map_location=torch.device('cpu')) )
+#     model_new.eval()
+#     return model,model_new,tokenizer
+#
+#
+#
+# def pred(model,model_new,x,tokenizer):
+#     pt_batch = tokenizer(
+#     x,
+#     padding=True,
+#     truncation=True,
+#     return_tensors="pt")
+#
+#     pt_outputs = model(**pt_batch)
+#     out=model_new(pt_outputs[1])
+#     cc=torch.log_softmax(out,dim = 1)
+#     _, y_pred_tags = torch.max(cc, dim = 1)
+#     return y_pred_tags
 
 if __name__ == "__main__":
     main()
