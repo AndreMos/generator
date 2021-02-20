@@ -93,7 +93,7 @@ numpy==1.14.0
 numpydoc==0.7.0
 openpyxl==2.4.10
 packaging==16.8
-pandas==0.22.0
+pandas==1.2.2
 pandocfilters==1.4.2
 parso==0.1.1
 partd==0.3.8
