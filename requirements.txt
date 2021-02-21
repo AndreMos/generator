@@ -1,2 +1,2 @@
-
-dlib==19.18.0
+cmake
+dlib
