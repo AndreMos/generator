@@ -6,8 +6,8 @@ import streamlit as st
 import argparse
 import numpy as np
 import PIL.Image
-import dnnlib
-import dnnlib.tflib as tflib
+#import dnnlib
+#import dnnlib.tflib as tflib
 import re
 import sys
 
