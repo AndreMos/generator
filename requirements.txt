@@ -1,5 +1,2 @@
-altair
-pandas
-streamlit
-cmake==3.18.0
+
 dlib==19.18.0
