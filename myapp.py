@@ -11,7 +11,7 @@ import PIL.Image
 import re
 import sys
 
-import pretrained_networks
+#import pretrained_networks
 
 
 def main():
