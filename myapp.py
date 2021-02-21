@@ -10,7 +10,7 @@ import dnnlib
 import dnnlib.tflib as tflib
 import re
 import sys
-#import dlib
+import dlib
 import pretrained_networks
 
 
