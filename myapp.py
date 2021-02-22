@@ -31,7 +31,7 @@ def main():
     but = st.sidebar.button('Generate profile')
     if but:
         image = generate_images('23', [1], 1)
-        st.image(image)
+        col1.image(image)
 
     # if submit:
     #     class_res = process(story)
