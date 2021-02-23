@@ -47,7 +47,7 @@ def main():
         tf_config = {'rnd.np_random_seed': 1000}
         tflib.init_tf(tf_config)
         _, _, _, Gs, _ = load_pkl('modulus')
-        latent_dim = Gs.components.synthesis.input_shape[2
+        latent_dim = Gs.components.synthesis.input_shape[2]
 
 
     # Building graph
