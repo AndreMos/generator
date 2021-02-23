@@ -66,6 +66,7 @@ def load():
     with zipfile.ZipFile('modulus.zip', 'r') as zip_ref:
         zip_ref.extractall()
     logging.info( os.listdir())
+    os.chdir('new_generator1/')
     dataset = pd.read_csv('dataset.csv')
     names = pd.read_csv('names.csv')
     return dataset, names
