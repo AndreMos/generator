@@ -32,12 +32,12 @@ def main():
     # dicti={'0':'Досуг', '1':'Искусство и культура', '2':'Карьера','3': 'Коммуникации',
     #   '4': 'Наука','5': 'Обучение', '6':'Спорт', '7':'Стартапы'}
     dataset, names = load()
-    col1, col2 = st.beta_columns(2)
+    col1, col2, col3 = st.beta_columns(3)
     #col1.title('Avatar here')
     #story = col2.text_area('Insert news')
-    submit = col2.title('Meta-info here')#
+    #col2.title('Meta-info here')#
     name = st.sidebar.text_input('Name', 'John')
-    st.sidebar.text_input('Surname', 'Johnson')
+    sn = st.sidebar.text_input('Surname', 'Johnson')
     slider = st.sidebar.select_slider('Age', ['Child', 'Teen', 'Adult', 'Old'])
     gen = st.sidebar.radio('Gender',['Male', "Female"])
     but = st.sidebar.button('Generate profile')
@@ -50,9 +50,29 @@ def main():
         age = slider.lower()
         gender = gen.lower()
         logging.info([gender,age,race])
-        res = dataset[(dataset['race'] == race) & (dataset['age'] == age) & (dataset['gender'] == gender)].sample(1)['id'].iloc[0]
+        ovr = dataset[(dataset['race'] == race) & (dataset['age'] == age) & (dataset['gender'] == gender)].sample(4)
+        res = ovr['id'].iloc[0]
         avatar = Image.open(race + '/' + str(res) + '.jpg')
-        col1.image(avatar)
+        pl = col1.empty()
+        pl.image(avatar, caption = 'Profile picture')
+        col2.subheader("Name: " + name)
+        col2.subheader('Surname: ' + sn)
+        col2.subheader('Location: ' )
+        col3.subheader('Other meta-data')
+        alt = col1.selectbox('Alternative profile ', ['current', '1','2','3'])
+        if alt == '1':
+            res = ovr['id'].iloc[1]
+            avatar = Image.open(race + '/' + str(res) + '.jpg')
+            pl.image(avatar, caption = 'Profile picture')
+        elif alf == '2':
+            res = ovr['id'].iloc[2]
+            avatar = Image.open(race + '/' + str(res) + '.jpg')
+            pl.image(avatar, caption = 'Profile picture')
+        elif alt == '3':
+            res = ovr['id'].iloc[3]
+            avatar = Image.open(race + '/' + str(res) + '.jpg')
+            pl.image(avatar, caption = 'Profile picture')
+
 
     # if submit:
     #     class_res = process(story)
