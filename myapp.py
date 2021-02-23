@@ -10,54 +10,47 @@ import PIL.Image
 # import dnnlib.tflib as tflib
 import re
 import sys
-import dlib
+import pandas as pd
 # import pretrained_networks
 import gdown
 
 import os
 import sys
 import argparse
-from tqdm import tqdm
-import tensorflow as tf
-import numpy as np
 
-from utils import imwrite, immerge
-from training.misc import load_pkl
-import dnnlib
-import dnnlib.tflib as tflib
+import zipfile
+
+
+
 
 
 def main():
     # story ='Я люблю тебя'
     # bert, classif,tokenizer = load_components()
     # pred_cl=pred(bert, classif,story,tokenizer)
-    dicti={'0':'Досуг', '1':'Искусство и культура', '2':'Карьера','3': 'Коммуникации',
-      '4': 'Наука','5': 'Обучение', '6':'Спорт', '7':'Стартапы'}
+    # dicti={'0':'Досуг', '1':'Искусство и культура', '2':'Карьера','3': 'Коммуникации',
+    #   '4': 'Наука','5': 'Обучение', '6':'Спорт', '7':'Стартапы'}
+    dataset, names = load()
     col1, col2 = st.beta_columns(2)
-    col1.title('Avatar here')
+    #col1.title('Avatar here')
     #story = col2.text_area('Insert news')
     submit = col2.title('Meta-info here')#
-    st.sidebar.text_input('Name', 'John')
+    name = st.sidebar.text_input('Name', 'John')
     st.sidebar.text_input('Surname', 'Johnson')
-    add_selectbox = st.sidebar.select_slider('Age', ['Child', 'Teen', 'Adult', 'Old'])
-    st.sidebar.radio('Gender',['Male', "Female"])
+    slider = st.sidebar.select_slider('Age', ['Child', 'Teen', 'Adult', 'Old'])
+    gen = st.sidebar.radio('Gender',['Male', "Female"])
     but = st.sidebar.button('Generate profile')
     if but:
-        _ = load()
-    tf_config = {'rnd.np_random_seed': 1000}
-    tflib.init_tf(tf_config)
-    _, _, _, Gs, _ = load_pkl('modulus')
-    latent_dim = Gs.components.synthesis.input_shape[2]
-
-    # Building graph
-    Z = tf.placeholder('float32', [None, latent_dim], name='Gaussian')
-    sampling_from_z = Gs.get_output_for(Z, None, randomize_noise=True)
-    sess = tf.get_default_session()
-    col1.title(Z.shape)
-    samples = sess.run(sampling_from_z, {Z: np.random.randn(8 * 2, latent_dim)})
-    samples = samples.transpose(0, 2, 3, 1)
-    img = samples[0]
-    col1.image(img)
+        h = names[names['name'].str.find(name)!=-1]['type']
+        if h.shape[0] > 0:
+            race = h.iloc[0]
+        else:
+            race = 'White'
+        age = slider.lower()
+        gender = gen.lower()
+        res = dataset[(dataset['race'] == race) & (dataset['age'] == age) & (dataset['gender'] == gender)].sample(1)['id'].iloc[0]
+        avatar = Image.open(race + '/' + res + '.jpg')
+        col1.image(avatar)
 
     # if submit:
     #     class_res = process(story)
@@ -65,11 +58,14 @@ def main():
     #     #write
 @st.cache(allow_output_mutation=True)
 def load():
-    print('Start')
-    url = 'https://drive.google.com/uc?id=1H_H8GtJUbdM2PFapDZpnDRw7KPmU_lPh'
-    output = 'modulus'
+    url = 'https://drive.google.com/uc?id=1NQIXdma7J0HJ6WfU0Z7VUcF_ypoJ9UrN'
+    output = 'modulus.zip'
     gdown.download(url, output, quiet=False)
-    print('End')
+    with zipfile.ZipFile('modulus.zip', 'r') as zip_ref:
+        zip_ref.extractall()
+    dataset = pd.read_csv('dataset.csv')
+    names = pd.read_csv('names.csv')
+    return dataset, names
 
     #return Gs
 
