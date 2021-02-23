@@ -6,13 +6,13 @@ import streamlit as st
 import argparse
 import numpy as np
 import PIL.Image
-import dnnlib
-import dnnlib.tflib as tflib
+# import dnnlib
+# import dnnlib.tflib as tflib
 import re
 import sys
 import dlib
-import pretrained_networks
-
+# import pretrained_networks
+import gdown
 
 def main():
     # story ='Я люблю тебя'
@@ -30,32 +30,39 @@ def main():
     st.sidebar.radio('Gender',['Male', "Female"])
     but = st.sidebar.button('Generate profile')
     if but:
-        image = generate_images('23', [1], 1)
-        col1.image(image)
+        image = load()
+        col1.title('image')
 
     # if submit:
     #     class_res = process(story)
     #     st.subheader(dicti[str(class_res)])
     #     #write
 
-def generate_images(network_pkl, seeds, truncation_psi):
-    print('Loading networks from "%s"...' % 'gdrive:networks/stylegan2-ffhq-config-f.pkl')
-    _G, _D, Gs = pretrained_networks.load_networks('gdrive:networks/stylegan2-ffhq-config-f.pkl')
-    noise_vars = [var for name, var in Gs.components.synthesis.vars.items() if name.startswith('noise')]
+def load():
+    print('Start')
+    url = 'https://drive.google.com/uc?id=1H_H8GtJUbdM2PFapDZpnDRw7KPmU_lPh'
+    output = 'modulus'
+    gdown.download(url, output, quiet=False)
+    print('End')
 
-    Gs_kwargs = dnnlib.EasyDict()
-    Gs_kwargs.output_transform = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
-    Gs_kwargs.randomize_noise = False
-    if truncation_psi is not None:
-        Gs_kwargs.truncation_psi = truncation_psi
-    os.chdir(r'/content/gdrive/My Drive/maga/new_data')
-    for seed_idx, seed in enumerate(seeds):
-        print('Generating image for seed %d (%d/%d) ...' % (seed, seed_idx, len(seeds)))
-        rnd = np.random.RandomState(seed)
-        z = rnd.randn(1, *Gs.input_shape[1:]) # [minibatch, component]
-        tflib.set_vars({var: rnd.randn(*var.shape.as_list()) for var in noise_vars}) # [height, width]
-        images = Gs.run(z, None, **Gs_kwargs) # [minibatch, height, width, channel]
-        return PIL.Image.fromarray(images[0], 'RGB')
+# def generate_images(network_pkl, seeds, truncation_psi):
+#     print('Loading networks from "%s"...' % 'gdrive:networks/stylegan2-ffhq-config-f.pkl')
+#     _G, _D, Gs = pretrained_networks.load_networks('gdrive:networks/stylegan2-ffhq-config-f.pkl')
+#     noise_vars = [var for name, var in Gs.components.synthesis.vars.items() if name.startswith('noise')]
+#
+#     Gs_kwargs = dnnlib.EasyDict()
+#     Gs_kwargs.output_transform = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
+#     Gs_kwargs.randomize_noise = False
+#     if truncation_psi is not None:
+#         Gs_kwargs.truncation_psi = truncation_psi
+#     os.chdir(r'/content/gdrive/My Drive/maga/new_data')
+#     for seed_idx, seed in enumerate(seeds):
+#         print('Generating image for seed %d (%d/%d) ...' % (seed, seed_idx, len(seeds)))
+#         rnd = np.random.RandomState(seed)
+#         z = rnd.randn(1, *Gs.input_shape[1:]) # [minibatch, component]
+#         tflib.set_vars({var: rnd.randn(*var.shape.as_list()) for var in noise_vars}) # [height, width]
+#         images = Gs.run(z, None, **Gs_kwargs) # [minibatch, height, width, channel]
+#         return PIL.Image.fromarray(images[0], 'RGB')
         #return images
         #PIL.Image.fromarray(images[0], 'RGB').save(dnnlib.make_run_dir_path('seed%04d.png' % seed))
 
