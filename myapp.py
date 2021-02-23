@@ -52,7 +52,7 @@ def main():
 
     # Building graph
         Z = tf.placeholder('float32', [None, latent_dim], name='Gaussian')
-        sampling_from_z = Gs.components.synthesis.get_output_for(Z, randomize_noise=False)
+        sampling_from_z = Gs.get_output_for(Z, None, randomize_noise=True)
         sess = tf.get_default_session()
         print(Z.shape)
         samples = sess.run(sampling_from_z, {Z: np.random.randn(8 * 2, latent_dim)})
