@@ -44,21 +44,20 @@ def main():
     but = st.sidebar.button('Generate profile')
     if but:
         _ = load()
-        tf_config = {'rnd.np_random_seed': 1000}
-        tflib.init_tf(tf_config)
-        _, _, _, Gs, _ = load_pkl('modulus')
-        latent_dim = Gs.components.synthesis.input_shape[2]
-
+    tf_config = {'rnd.np_random_seed': 1000}
+    tflib.init_tf(tf_config)
+    _, _, _, Gs, _ = load_pkl('modulus')
+    latent_dim = Gs.components.synthesis.input_shape[2]
 
     # Building graph
-        Z = tf.placeholder('float32', [None, latent_dim], name='Gaussian')
-        sampling_from_z = Gs.get_output_for(Z, None, randomize_noise=True)
-        sess = tf.get_default_session()
-        col1.title(Z.shape)
-        samples = sess.run(sampling_from_z, {Z: np.random.randn(8 * 2, latent_dim)})
-        samples = samples.transpose(0, 2, 3, 1)
-        img = samples[0]
-        col1.image(img)
+    Z = tf.placeholder('float32', [None, latent_dim], name='Gaussian')
+    sampling_from_z = Gs.get_output_for(Z, None, randomize_noise=True)
+    sess = tf.get_default_session()
+    col1.title(Z.shape)
+    samples = sess.run(sampling_from_z, {Z: np.random.randn(8 * 2, latent_dim)})
+    samples = samples.transpose(0, 2, 3, 1)
+    img = samples[0]
+    col1.image(img)
 
     # if submit:
     #     class_res = process(story)
