@@ -43,8 +43,18 @@ def main():
     st.sidebar.radio('Gender',['Male', "Female"])
     but = st.sidebar.button('Generate profile')
     if but:
-        model = load()
-        col1.title('image')
+        Gs = load()
+        latent_dim = Gs.components.synthesis.input_shape[2]
+
+    # Building graph
+        Z = tf.placeholder('float32', [None, latent_dim], name='Gaussian')
+        sampling_from_z = Gs.get_output_for(Z, None, randomize_noise=True)
+        sess = tf.get_default_session()
+
+        samples = sess.run(sampling_from_z, {Z: np.random.randn(1 * 2, latent_dim)})
+        samples = samples.transpose(0, 2, 3, 1)
+        img = samples[0]
+        col1.image(img)
 
     # if submit:
     #     class_res = process(story)
