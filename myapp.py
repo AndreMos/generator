@@ -19,6 +19,7 @@ import sys
 import argparse
 
 import zipfile
+import logging
 
 
 
@@ -56,13 +57,15 @@ def main():
     #     class_res = process(story)
     #     st.subheader(dicti[str(class_res)])
     #     #write
-@st.cache(allow_output_mutation=True)
+#@st.cache(allow_output_mutation=True)
 def load():
     url = 'https://drive.google.com/uc?id=1NQIXdma7J0HJ6WfU0Z7VUcF_ypoJ9UrN'
     output = 'modulus.zip'
+    logging.info('Start load')
     gdown.download(url, output, quiet=False)
     with zipfile.ZipFile('modulus.zip', 'r') as zip_ref:
         zip_ref.extractall()
+    logging.info('Extract load')
     dataset = pd.read_csv('dataset.csv')
     names = pd.read_csv('names.csv')
     return dataset, names
