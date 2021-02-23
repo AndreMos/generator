@@ -88,10 +88,10 @@ def load():
     with zipfile.ZipFile('modulus.zip', 'r') as zip_ref:
         zip_ref.extractall()
 
-    os.chdir('/app/generator/')
-    dataset = pd.read_csv('dataset.csv')
+    stri = '/app/generator/new_generator1/'
+    dataset = pd.read_csv(stri + 'dataset.csv')
     dataset['id'] = dataset['id'].astype(int)
-    names = pd.read_csv('names.csv')
+    names = pd.read_csv(stri + 'names.csv')
     return dataset, names
 
     #return Gs
