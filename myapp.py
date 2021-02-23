@@ -51,7 +51,7 @@ def main():
         sampling_from_z = Gs.get_output_for(Z, None, randomize_noise=True)
         sess = tf.get_default_session()
 
-        samples = sess.run(sampling_from_z, {Z: np.random.randn(1 * 2, latent_dim)})
+        samples = sess.run(sampling_from_z, {Z: np.random.randn(8 * 2, latent_dim)})
         samples = samples.transpose(0, 2, 3, 1)
         img = samples[0]
         col1.image(img)
