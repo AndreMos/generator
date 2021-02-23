@@ -32,6 +32,7 @@ def main():
     # dicti={'0':'Досуг', '1':'Искусство и культура', '2':'Карьера','3': 'Коммуникации',
     #   '4': 'Наука','5': 'Обучение', '6':'Спорт', '7':'Стартапы'}
     dataset, names = load()
+    os.chdir('/app/generator/')
     col1, col2, col3 = st.beta_columns(3)
     #col1.title('Avatar here')
     #story = col2.text_area('Insert news')
