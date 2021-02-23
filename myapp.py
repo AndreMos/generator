@@ -14,6 +14,19 @@ import dlib
 # import pretrained_networks
 import gdown
 
+import os
+import sys
+import argparse
+from tqdm import tqdm
+import tensorflow as tf
+import numpy as np
+
+from utils import imwrite, immerge
+from training.misc import load_pkl
+import dnnlib
+import dnnlib.tflib as tflib
+
+
 def main():
     # story ='Я люблю тебя'
     # bert, classif,tokenizer = load_components()
@@ -30,20 +43,24 @@ def main():
     st.sidebar.radio('Gender',['Male', "Female"])
     but = st.sidebar.button('Generate profile')
     if but:
-        image = load()
+        model = load()
         col1.title('image')
 
     # if submit:
     #     class_res = process(story)
     #     st.subheader(dicti[str(class_res)])
     #     #write
-
+@st.cache(allow_output_mutation=True)
 def load():
     print('Start')
     url = 'https://drive.google.com/uc?id=1H_H8GtJUbdM2PFapDZpnDRw7KPmU_lPh'
     output = 'modulus'
     gdown.download(url, output, quiet=False)
     print('End')
+    tf_config = {'rnd.np_random_seed': 1000}
+    tflib.init_tf(tf_config)
+    , _, _, Gs, _ = load_pkl('modulus')
+    return Gs
 
 # def generate_images(network_pkl, seeds, truncation_psi):
 #     print('Loading networks from "%s"...' % 'gdrive:networks/stylegan2-ffhq-config-f.pkl')
