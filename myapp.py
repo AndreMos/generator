@@ -49,6 +49,7 @@ def main():
             race = 'White'
         age = slider.lower()
         gender = gen.lower()
+        logging.info([gender,age,race])
         res = dataset[(dataset['race'] == race) & (dataset['age'] == age) & (dataset['gender'] == gender)].sample(1)['id'].iloc[0]
         avatar = Image.open(race + '/' + res + '.jpg')
         col1.image(avatar)
@@ -65,7 +66,7 @@ def load():
     gdown.download(url, output, quiet=False)
     with zipfile.ZipFile('modulus.zip', 'r') as zip_ref:
         zip_ref.extractall()
-    logging.info( os.listdir())
+
     os.chdir('new_generator1/')
     dataset = pd.read_csv('dataset.csv')
     names = pd.read_csv('names.csv')
