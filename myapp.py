@@ -5,7 +5,7 @@ import streamlit as st
 #import torch.nn as nn
 import argparse
 import numpy as np
-import PIL.Image
+from PIL import Image
 # import dnnlib
 # import dnnlib.tflib as tflib
 import re
