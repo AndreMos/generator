@@ -51,7 +51,7 @@ def main():
         gender = gen.lower()
         logging.info([gender,age,race])
         res = dataset[(dataset['race'] == race) & (dataset['age'] == age) & (dataset['gender'] == gender)].sample(1)['id'].iloc[0]
-        avatar = Image.open(race + '/' + int(res) + '.jpg')
+        avatar = Image.open(race + '/' + str(res) + '.jpg')
         col1.image(avatar)
 
     # if submit:
@@ -69,7 +69,7 @@ def load():
 
     os.chdir('/app/generator/new_generator1/')
     dataset = pd.read_csv('dataset.csv')
-    dataset['id'] = dataset['id'].astype(int) 
+    dataset['id'] = dataset['id'].astype(int)
     names = pd.read_csv('names.csv')
     return dataset, names
 
