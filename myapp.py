@@ -43,8 +43,12 @@ def main():
     st.sidebar.radio('Gender',['Male', "Female"])
     but = st.sidebar.button('Generate profile')
     if but:
-        Gs = load()
-        latent_dim = Gs.components.synthesis.input_shape[2]
+        _ = load()
+        tf_config = {'rnd.np_random_seed': 1000}
+        tflib.init_tf(tf_config)
+        _, _, _, Gs, _ = load_pkl('modulus')
+        latent_dim = Gs.components.synthesis.input_shape[2
+
 
     # Building graph
         Z = tf.placeholder('float32', [None, latent_dim], name='Gaussian')
@@ -67,10 +71,8 @@ def load():
     output = 'modulus'
     gdown.download(url, output, quiet=False)
     print('End')
-    tf_config = {'rnd.np_random_seed': 1000}
-    tflib.init_tf(tf_config)
-    _, _, _, Gs, _ = load_pkl('modulus')
-    return Gs
+
+    #return Gs
 
 # def generate_images(network_pkl, seeds, truncation_psi):
 #     print('Loading networks from "%s"...' % 'gdrive:networks/stylegan2-ffhq-config-f.pkl')
