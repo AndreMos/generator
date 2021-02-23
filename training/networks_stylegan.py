@@ -1,8 +1,9 @@
-# Copyright (c) 2019, NVIDIA Corporation. All rights reserved.
+﻿# Copyright (c) 2019, NVIDIA CORPORATION. All rights reserved.
 #
-# This work is made available under the Nvidia Source Code License-NC.
-# To view a copy of this license, visit
-# https://nvlabs.github.io/stylegan2/license.html
+# This work is licensed under the Creative Commons Attribution-NonCommercial
+# 4.0 International License. To view a copy of this license, visit
+# http://creativecommons.org/licenses/by-nc/4.0/ or send a letter to
+# Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
 """Network architectures used in the StyleGAN paper."""
 
@@ -47,6 +48,7 @@ def _blur2d(x, f=[1,2,1], normalize=True, flip=False, stride=1):
     x = tf.cast(x, orig_dtype)
     return x
 
+
 def _upscale2d(x, factor=2, gain=1):
     assert x.shape.ndims == 4 and all(dim.value is not None for dim in x.shape[1:])
     assert isinstance(factor, int) and factor >= 1
@@ -65,6 +67,7 @@ def _upscale2d(x, factor=2, gain=1):
     x = tf.tile(x, [1, 1, 1, factor, 1, factor])
     x = tf.reshape(x, [-1, s[1], s[2] * factor, s[3] * factor])
     return x
+
 
 def _downscale2d(x, factor=2, gain=1):
     assert x.shape.ndims == 4 and all(dim.value is not None for dim in x.shape[1:])
@@ -104,6 +107,7 @@ def blur2d(x, f=[1,2,1], normalize=True):
             return y, grad
         return func(x)
 
+
 def upscale2d(x, factor=2):
     with tf.variable_scope('Upscale2D'):
         @tf.custom_gradient
@@ -115,6 +119,7 @@ def upscale2d(x, factor=2):
                 return dx, lambda ddx: _upscale2d(ddx, factor)
             return y, grad
         return func(x)
+
 
 def downscale2d(x, factor=2):
     with tf.variable_scope('Downscale2D'):
@@ -189,6 +194,7 @@ def upscale2d_conv2d(x, fmaps, kernel, fused_scale='auto', **kwargs):
     os = [tf.shape(x)[0], fmaps, x.shape[2] * 2, x.shape[3] * 2]
     return tf.nn.conv2d_transpose(x, w, os, strides=[1,1,2,2], padding='SAME', data_format='NCHW')
 
+
 def conv2d_downscale2d(x, fmaps, kernel, fused_scale='auto', **kwargs):
     assert kernel >= 1 and kernel % 2 == 1
     assert fused_scale in [True, False, 'auto']
@@ -209,7 +215,7 @@ def conv2d_downscale2d(x, fmaps, kernel, fused_scale='auto', **kwargs):
 #----------------------------------------------------------------------------
 # Apply bias to the given activation tensor.
 
-def apply_bias(x, lrmul=1):
+def apply_bias(x, lrmul=1.):
     b = tf.get_variable('bias', shape=[x.shape[1]], initializer=tf.initializers.zeros()) * lrmul
     b = tf.cast(b, x.dtype)
     if len(x.shape) == 2:
@@ -276,6 +282,10 @@ def apply_noise(x, noise_var=None, randomize_noise=True):
         weight = tf.get_variable('weight', shape=[x.shape[1].value], initializer=tf.initializers.zeros())
         return x + noise * tf.reshape(tf.cast(weight, x.dtype), [1, -1, 1, 1])
 
+
+def normalize(v):
+    return v / tf.sqrt(tf.reduce_sum(tf.square(v), axis=-1, keepdims=True))
+
 #----------------------------------------------------------------------------
 # Minibatch standard deviation.
 
@@ -334,7 +344,7 @@ def G_style(
     num_layers = components.synthesis.input_shape[1]
     dlatent_size = components.synthesis.input_shape[2]
     if 'mapping' not in components:
-        components.mapping = tflib.Network('G_mapping', func_name=G_mapping, dlatent_broadcast=num_layers, **kwargs)
+        components.mapping = tflib.Network('G_mapping_ND', func_name=G_mapping_ND, dlatent_broadcast=num_layers, **kwargs)
 
     # Setup variables.
     lod_in = tf.get_variable('lod', initializer=np.float32(0), trainable=False)
@@ -554,6 +564,9 @@ def G_synthesis(
             return img()
         images_out = grow(x, 3, resolution_log2 - 3)
 
+    with tf.variable_scope('Tanh'):
+        images_out = tf.nn.tanh(images_out)
+
     assert images_out.dtype == tf.as_dtype(dtype)
     return tf.identity(images_out, name='images_out')
 
@@ -658,3 +671,120 @@ def D_basic(
     return scores_out
 
 #----------------------------------------------------------------------------
+# invertible network used in paper(z==>w)
+def G_mapping_ND(
+    latents_in,                             # First input: Latent vectors (Z) [minibatch, latent_size].
+    labels_in,                              # Second input: Conditioning labels [minibatch, label_size].
+    latent_size             = 512,          # Latent vector (Z) dimensionality.
+    hidden_width            = 512,          # Disentangled latent (W) dimensionality.
+    dlatent_broadcast       = None,         # Output disentangled latent (W) as [minibatch, dlatent_size] or [minibatch, dlatent_broadcast, dlatent_size].
+    depth                   = 4,            # Number of mapping layers.
+    flow_coupling           = 0,            # 0=additive, 1=affine
+    dtype                   = 'float32',    # Data type to use for activations and outputs.
+    **_kwargs):                             # Ignore unrecognized keyword args.
+
+    # Inputs.
+    latents_in.set_shape([None, latent_size])
+    labels_in.set_shape([None, 0])
+    latents_in = tf.cast(latents_in, dtype)
+    net = latents_in
+
+    # mapping layers.
+    for i in reversed(range(depth)):
+        net = step(str(i), z=net,  width=hidden_width, flow_coupling=flow_coupling, reverse=True)
+
+    # Broadcast.
+    if dlatent_broadcast is not None:
+        with tf.variable_scope('Broadcast'):
+            net = tf.tile(net[:, np.newaxis], [1, dlatent_broadcast, 1])
+
+    # Output.
+    assert net.dtype == tf.as_dtype(dtype)
+    return tf.identity(net, name='dlatents_out')
+
+#----------------------------------------------------------------------------
+# invertible network used in paper(w==>z)
+def G_mapping_NE(
+    feature_in,                             # First input: Latent vectors (Z) [minibatch, latent_size].
+    labels_in,                              # Second input: Conditioning labels [minibatch, label_size].
+    feature_size            = 512,          # Latent vector (Z) dimensionality.
+    hidden_width            = 512,          # Disentangled latent (W) dimensionality.
+    dlatent_broadcast       = 1,            # Output disentangled latent (W) as [minibatch, dlatent_size] or [minibatch, dlatent_broadcast, dlatent_size].
+    depth                   = 4,            # Number of mapping layers.
+    flow_coupling           = 0,            # 0=additive, 1=affine
+    dtype                   = 'float32',    # Data type to use for activations and outputs.
+    **_kwargs):                             # Ignore unrecognized keyword args.
+
+    # Inputs.
+    feature_in.set_shape([None, feature_size])
+    labels_in.set_shape([None, 0])
+    feature_in = tf.cast(feature_in, dtype)
+    net = feature_in
+
+    for i in range(depth):
+        net = step(str(i), z=net,  width=hidden_width, flow_coupling=flow_coupling, reverse=False)
+
+    # Output.
+    assert net.dtype == tf.as_dtype(dtype)
+    return tf.identity(net, name='dlatents_out')
+
+
+def f(name, x, width, n_out=None, use_wscale=True, mapping_lrmul=0.01):
+    with tf.variable_scope(name):
+        with tf.variable_scope('dense1'):
+            x = dense(x, fmaps=width, gain=np.sqrt(2), use_wscale=use_wscale, lrmul=mapping_lrmul)
+            x = apply_bias(x, lrmul=mapping_lrmul)
+            x = leaky_relu(x)
+        with tf.variable_scope('dense2'):
+            x = dense(x, fmaps=n_out, gain=np.sqrt(2), use_wscale=use_wscale, lrmul=mapping_lrmul)
+            x = apply_bias(x, lrmul=mapping_lrmul)
+            x = leaky_relu(x)
+    return x
+
+
+def reverse_features(h):
+    return h[:, ::-1]
+
+
+def step(name_scope, z, width, flow_coupling, reverse):
+    with tf.variable_scope(name_scope):
+
+        n_z = z.get_shape()[1]
+
+        if not reverse:
+
+            z = reverse_features(z)
+
+            z1 = z[:, :n_z // 2]
+            z2 = z[:, n_z // 2:]
+
+            if flow_coupling == 0:
+                z2 += f("f_inv", z1, width, n_out=n_z//2)
+            elif flow_coupling == 1:
+                h = f("f_inv", z1, width, n_out=n_z)
+                shift = h[:, 0::2]
+                scale = tf.nn.sigmoid(h[:, 1::2] + 2.)
+                z2 += shift
+                z2 *= scale
+
+            z = tf.concat([z1, z2], 1)
+
+        else:
+
+            z1 = z[:, :n_z // 2]
+            z2 = z[:, n_z // 2:]
+
+            if flow_coupling == 0:
+                z2 -= f("f_inv", z1, width, n_out=n_z//2)
+            elif flow_coupling == 1:
+                h = f("f_inv", z1, width, n_out=n_z)
+                shift = h[:, 0::2]
+                scale = tf.nn.sigmoid(h[:, 1::2] + 2.)
+                z2 /= scale
+                z2 -= shift
+
+            z = tf.concat([z1, z2], 1)
+
+            z = reverse_features(z)
+
+    return z

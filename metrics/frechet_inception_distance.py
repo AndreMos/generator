@@ -1,8 +1,9 @@
-# Copyright (c) 2019, NVIDIA Corporation. All rights reserved.
+# Copyright (c) 2019, NVIDIA CORPORATION. All rights reserved.
 #
-# This work is made available under the Nvidia Source Code License-NC.
-# To view a copy of this license, visit
-# https://nvlabs.github.io/stylegan2/license.html
+# This work is licensed under the Creative Commons Attribution-NonCommercial
+# 4.0 International License. To view a copy of this license, visit
+# http://creativecommons.org/licenses/by-nc/4.0/ or send a letter to
+# Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
 """Frechet Inception Distance (FID)."""
 
@@ -23,9 +24,9 @@ class FID(metric_base.MetricBase):
         self.num_images = num_images
         self.minibatch_per_gpu = minibatch_per_gpu
 
-    def _evaluate(self, Gs, Gs_kwargs, num_gpus):
+    def _evaluate(self, Gs, num_gpus):
         minibatch_size = num_gpus * self.minibatch_per_gpu
-        inception = misc.load_pkl('https://nvlabs-fi-cdn.nvidia.com/stylegan/networks/metrics/inception_v3_features.pkl')
+        inception = misc.load_pkl('./inception_v3_features.pkl') # inception_v3_features.pkl
         activations = np.empty([self.num_images, inception.output_shape[1]], dtype=np.float32)
 
         # Calculate statistics for reals.
@@ -51,14 +52,12 @@ class FID(metric_base.MetricBase):
                 Gs_clone = Gs.clone()
                 inception_clone = inception.clone()
                 latents = tf.random_normal([self.minibatch_per_gpu] + Gs_clone.input_shape[1:])
-                labels = self._get_random_labels_tf(self.minibatch_per_gpu)
-                images = Gs_clone.get_output_for(latents, labels, **Gs_kwargs)
+                images = Gs_clone.get_output_for(latents, None, is_validation=True, randomize_noise=True)
                 images = tflib.convert_images_to_uint8(images)
                 result_expr.append(inception_clone.get_output_for(images))
 
         # Calculate statistics for fakes.
         for begin in range(0, self.num_images, minibatch_size):
-            self._report_progress(begin, self.num_images)
             end = min(begin + minibatch_size, self.num_images)
             activations[begin:end] = np.concatenate(tflib.run(result_expr), axis=0)[:end-begin]
         mu_fake = np.mean(activations, axis=0)

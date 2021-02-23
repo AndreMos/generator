@@ -1,20 +1,15 @@
-# Copyright (c) 2019, NVIDIA Corporation. All rights reserved.
+﻿# Copyright (c) 2019, NVIDIA CORPORATION. All rights reserved.
 #
-# This work is made available under the Nvidia Source Code License-NC.
-# To view a copy of this license, visit
-# https://nvlabs.github.io/stylegan2/license.html
+# This work is licensed under the Creative Commons Attribution-NonCommercial
+# 4.0 International License. To view a copy of this license, visit
+# http://creativecommons.org/licenses/by-nc/4.0/ or send a letter to
+# Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
 """Miscellaneous helper utils for Tensorflow."""
 
 import os
 import numpy as np
 import tensorflow as tf
-
-# Silence deprecation warnings from TensorFlow 1.13 onwards
-import logging
-logging.getLogger('tensorflow').setLevel(logging.ERROR)
-import tensorflow.contrib   # requires TensorFlow 1.x!
-tf.contrib = tensorflow.contrib
 
 from typing import Any, Iterable, List, Union
 
@@ -37,7 +32,7 @@ def is_tf_expression(x: Any) -> bool:
 
 
 def shape_to_list(shape: Iterable[tf.Dimension]) -> List[Union[int, None]]:
-    """Convert a Tensorflow shape to a list of ints. Retained for backwards compatibility -- use TensorShape.as_list() in new code."""
+    """Convert a Tensorflow shape to a list of ints."""
     return [dim.value for dim in shape]
 
 
@@ -90,14 +85,6 @@ def _sanitize_tf_config(config_dict: dict = None) -> dict:
     cfg["graph_options.place_pruned_graph"] = True      # False = Check that all ops are available on the designated device. True = Skip the check for ops that are not used.
     cfg["gpu_options.allow_growth"]         = True      # False = Allocate all GPU memory at the beginning. True = Allocate only as much GPU memory as needed.
 
-    # Remove defaults for environment variables that are already set.
-    for key in list(cfg):
-        fields = key.split(".")
-        if fields[0] == "env":
-            assert len(fields) == 2
-            if fields[1] in os.environ:
-                del cfg[key]
-
     # User overrides.
     if config_dict is not None:
         cfg.update(config_dict)
@@ -122,7 +109,7 @@ def init_tf(config_dict: dict = None) -> None:
         tf.set_random_seed(tf_random_seed)
 
     # Setup environment variables.
-    for key, value in cfg.items():
+    for key, value in list(cfg.items()):
         fields = key.split(".")
         if fields[0] == "env":
             assert len(fields) == 2
@@ -157,7 +144,8 @@ def create_session(config_dict: dict = None, force_as_default: bool = False) -> 
         # pylint: disable=protected-access
         session._default_session = session.as_default()
         session._default_session.enforce_nesting = False
-        session._default_session.__enter__()
+        session._default_session.__enter__() # pylint: disable=no-member
+
     return session
 
 
@@ -234,7 +222,7 @@ def convert_images_from_uint8(images, drange=[-1,1], nhwc_to_nchw=False):
     images = tf.cast(images, tf.float32)
     if nhwc_to_nchw:
         images = tf.transpose(images, [0, 3, 1, 2])
-    return images * ((drange[1] - drange[0]) / 255) + drange[0]
+    return (images - drange[0]) * ((drange[1] - drange[0]) / 255)
 
 
 def convert_images_to_uint8(images, drange=[-1,1], nchw_to_nhwc=False, shrink=1):

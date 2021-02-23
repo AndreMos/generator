@@ -1,8 +1,9 @@
-# Copyright (c) 2019, NVIDIA Corporation. All rights reserved.
+﻿# Copyright (c) 2019, NVIDIA CORPORATION. All rights reserved.
 #
-# This work is made available under the Nvidia Source Code License-NC.
-# To view a copy of this license, visit
-# https://nvlabs.github.io/stylegan2/license.html
+# This work is licensed under the Creative Commons Attribution-NonCommercial
+# 4.0 International License. To view a copy of this license, visit
+# http://creativecommons.org/licenses/by-nc/4.0/ or send a letter to
+# Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
 """Helper for adding automatically tracked values to Tensorboard.
 
@@ -31,10 +32,6 @@ from . import tfutil
 from .tfutil import TfExpression
 from .tfutil import TfExpressionEx
 
-# Enable "Custom scalars" tab in TensorBoard for advanced formatting.
-# Disabled by default to reduce tfevents file size.
-enable_custom_scalars = False
-
 _dtype = tf.float64
 _vars = OrderedDict()  # name => [var, ...]
 _immediate = OrderedDict()  # name => update_op, update_value
@@ -49,7 +46,7 @@ def _create_var(name: str, value_expr: TfExpression) -> TfExpression:
     v = tf.cast(value_expr, _dtype)
 
     if v.shape.is_fully_defined():
-        size = np.prod(v.shape.as_list())
+        size = np.prod(tfutil.shape_to_list(v.shape))
         size_expr = tf.constant(size, dtype=_dtype)
     else:
         size = None
@@ -74,7 +71,7 @@ def _create_var(name: str, value_expr: TfExpression) -> TfExpression:
     return update_op
 
 
-def autosummary(name: str, value: TfExpressionEx, passthru: TfExpressionEx = None, condition: TfExpressionEx = True) -> TfExpressionEx:
+def autosummary(name: str, value: TfExpressionEx, passthru: TfExpressionEx = None) -> TfExpressionEx:
     """Create a new autosummary.
 
     Args:
@@ -96,22 +93,19 @@ def autosummary(name: str, value: TfExpressionEx, passthru: TfExpressionEx = Non
 
     if tfutil.is_tf_expression(value):
         with tf.name_scope("summary_" + name_id), tf.device(value.device):
-            condition = tf.convert_to_tensor(condition, name='condition')
-            update_op = tf.cond(condition, lambda: tf.group(_create_var(name, value)), tf.no_op)
+            update_op = _create_var(name, value)
             with tf.control_dependencies([update_op]):
                 return tf.identity(value if passthru is None else passthru)
 
     else:  # python scalar or numpy array
-        assert not tfutil.is_tf_expression(passthru)
-        assert not tfutil.is_tf_expression(condition)
-        if condition:
-            if name not in _immediate:
-                with tfutil.absolute_name_scope("Autosummary/" + name_id), tf.device(None), tf.control_dependencies(None):
-                    update_value = tf.placeholder(_dtype)
-                    update_op = _create_var(name, update_value)
-                    _immediate[name] = update_op, update_value
-            update_op, update_value = _immediate[name]
-            tfutil.run(update_op, {update_value: value})
+        if name not in _immediate:
+            with tfutil.absolute_name_scope("Autosummary/" + name_id), tf.device(None), tf.control_dependencies(None):
+                update_value = tf.placeholder(_dtype)
+                update_op = _create_var(name, update_value)
+                _immediate[name] = update_op, update_value
+
+        update_op, update_value = _immediate[name]
+        tfutil.run(update_op, {update_value: value})
         return value if passthru is None else passthru
 
 
@@ -141,37 +135,36 @@ def finalize_autosummaries() -> None:
                         mean = moments[1]
                         std = tf.sqrt(moments[2] - tf.square(moments[1]))
                         tf.summary.scalar(name, mean)
-                        if enable_custom_scalars:
-                            tf.summary.scalar("xCustomScalars/" + name + "/margin_lo", mean - std)
-                            tf.summary.scalar("xCustomScalars/" + name + "/margin_hi", mean + std)
+                        tf.summary.scalar("xCustomScalars/" + name + "/margin_lo", mean - std)
+                        tf.summary.scalar("xCustomScalars/" + name + "/margin_hi", mean + std)
 
-    # Setup layout for custom scalars.
-    layout = None
-    if enable_custom_scalars:
-        cat_dict = OrderedDict()
-        for series_name in sorted(_vars.keys()):
-            p = series_name.split("/")
-            cat = p[0] if len(p) >= 2 else ""
-            chart = "/".join(p[1:-1]) if len(p) >= 3 else p[-1]
-            if cat not in cat_dict:
-                cat_dict[cat] = OrderedDict()
-            if chart not in cat_dict[cat]:
-                cat_dict[cat][chart] = []
-            cat_dict[cat][chart].append(series_name)
-        categories = []
-        for cat_name, chart_dict in cat_dict.items():
-            charts = []
-            for chart_name, series_names in chart_dict.items():
-                series = []
-                for series_name in series_names:
-                    series.append(layout_pb2.MarginChartContent.Series(
-                        value=series_name,
-                        lower="xCustomScalars/" + series_name + "/margin_lo",
-                        upper="xCustomScalars/" + series_name + "/margin_hi"))
-                margin = layout_pb2.MarginChartContent(series=series)
-                charts.append(layout_pb2.Chart(title=chart_name, margin=margin))
-            categories.append(layout_pb2.Category(title=cat_name, chart=charts))
-        layout = summary_lib.custom_scalar_pb(layout_pb2.Layout(category=categories))
+    # Group by category and chart name.
+    cat_dict = OrderedDict()
+    for series_name in sorted(_vars.keys()):
+        p = series_name.split("/")
+        cat = p[0] if len(p) >= 2 else ""
+        chart = "/".join(p[1:-1]) if len(p) >= 3 else p[-1]
+        if cat not in cat_dict:
+            cat_dict[cat] = OrderedDict()
+        if chart not in cat_dict[cat]:
+            cat_dict[cat][chart] = []
+        cat_dict[cat][chart].append(series_name)
+
+    # Setup custom_scalar layout.
+    categories = []
+    for cat_name, chart_dict in cat_dict.items():
+        charts = []
+        for chart_name, series_names in chart_dict.items():
+            series = []
+            for series_name in series_names:
+                series.append(layout_pb2.MarginChartContent.Series(
+                    value=series_name,
+                    lower="xCustomScalars/" + series_name + "/margin_lo",
+                    upper="xCustomScalars/" + series_name + "/margin_hi"))
+            margin = layout_pb2.MarginChartContent(series=series)
+            charts.append(layout_pb2.Chart(title=chart_name, margin=margin))
+        categories.append(layout_pb2.Category(title=cat_name, chart=charts))
+    layout = summary_lib.custom_scalar_pb(layout_pb2.Layout(category=categories))
     return layout
 
 def save_summaries(file_writer, global_step=None):
