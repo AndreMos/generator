@@ -59,7 +59,7 @@ def load():
     print('End')
     tf_config = {'rnd.np_random_seed': 1000}
     tflib.init_tf(tf_config)
-    , _, _, Gs, _ = load_pkl('modulus')
+    _, _, _, Gs, _ = load_pkl('modulus')
     return Gs
 
 # def generate_images(network_pkl, seeds, truncation_psi):
