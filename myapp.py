@@ -20,7 +20,7 @@ import argparse
 
 import zipfile
 import logging
-os.chdir('/app/generator/')
+#os.chdir('/app/generator/')
 
 
 
@@ -88,7 +88,7 @@ def load():
     with zipfile.ZipFile('modulus.zip', 'r') as zip_ref:
         zip_ref.extractall()
 
-    os.chdir('/app/generator/new_generator1/')
+    os.chdir('/app/generator/')
     dataset = pd.read_csv('dataset.csv')
     dataset['id'] = dataset['id'].astype(int)
     names = pd.read_csv('names.csv')
