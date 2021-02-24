@@ -61,7 +61,7 @@ def main():
         pl = col1.empty()
         pl.image(avatar, caption = 'Profile picture')
         col2.subheader("Name: " + name)
-        col2.subheader('Surname: ' + sn)s
+        col2.subheader('Surname: ' + sn)
         col2.subheader('Location: ' )
         col3.subheader('Other meta-data')
         show_alt1 = show_alt.button('Show alternative')
