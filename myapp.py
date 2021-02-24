@@ -42,7 +42,7 @@ def main():
     slider = st.sidebar.select_slider('Age', ['Child', 'Teen', 'Adult', 'Old'])
     gen = st.sidebar.radio('Gender',['Male', "Female"])
     but = st.sidebar.button('Generate profile')
-    show_alt = col1.empty()
+    show_alt = st.sidebar.empty()
     show_alt1 = False#.sidebar.button('Show alternative')
     os.chdir('/app/generator/new_generator1')
     if but:
@@ -64,7 +64,7 @@ def main():
         col2.subheader('Surname: ' + sn)
         col2.subheader('Location: ' )
         col3.subheader('Other meta-data')
-        show_alt1 = show_alt.sidebar.button('Show alternative')
+        show_alt1 = show_alt.button('Show alternative')
         #alt = st.sidebar.selectbox('Alternative profile ', ['current', '1','2','3'])
         #
     if show_alt1:
