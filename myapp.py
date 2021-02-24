@@ -42,6 +42,7 @@ def main():
     slider = st.sidebar.select_slider('Age', ['Child', 'Teen', 'Adult', 'Old'])
     gen = st.sidebar.radio('Gender',['Male', "Female"])
     but = st.sidebar.button('Generate profile')
+    alt = 0
     if but:
         h = names[names['name'].str.find(name)!=-1]['type']
         if h.shape[0] > 0:
@@ -62,18 +63,18 @@ def main():
         col2.subheader('Location: ' )
         col3.subheader('Other meta-data')
         alt = col1.selectbox('Alternative profile ', ['current', '1','2','3'])
-        if alt == '1':
-            res = ovr['id'].iloc[1]
-            avatar = Image.open(race + '/' + str(res) + '.jpg')
-            pl.image(avatar, caption = 'Profile picture')
-        elif alt == '2':
-            res = ovr['id'].iloc[2]
-            avatar = Image.open(race + '/' + str(res) + '.jpg')
-            pl.image(avatar, caption = 'Profile picture')
-        elif alt == '3':
-            res = ovr['id'].iloc[3]
-            avatar = Image.open(race + '/' + str(res) + '.jpg')
-            pl.image(avatar, caption = 'Profile picture')
+    if alt == '1':
+        res = ovr['id'].iloc[1]
+        avatar = Image.open(race + '/' + str(res) + '.jpg')
+        pl.image(avatar, caption = 'Profile picture')
+    elif alt == '2':
+        res = ovr['id'].iloc[2]
+        avatar = Image.open(race + '/' + str(res) + '.jpg')
+        pl.image(avatar, caption = 'Profile picture')
+    elif alt == '3':
+        res = ovr['id'].iloc[3]
+        avatar = Image.open(race + '/' + str(res) + '.jpg')
+        pl.image(avatar, caption = 'Profile picture')
 
     os.chdir('/app/generator/')
 
