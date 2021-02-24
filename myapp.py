@@ -61,17 +61,17 @@ def main():
         pl = col1.empty()
         pl.image(avatar, caption = 'Profile picture')
         col2.subheader("Name: " + name)
-        col2.subheader('Surname: ' + sn)
+        col2.subheader('Surname: ' + sn)s
         col2.subheader('Location: ' )
         col3.subheader('Other meta-data')
-    show_alt1 = show_alt.button('Show alternative')
-        #alt = st.sidebar.selectbox('Alternative profile ', ['current', '1','2','3'])
-        #
-    if show_alt1:
-        res = ovr['id'].iloc[1]
-        logging.info(res)
-        avatar = Image.open(race + '/' + str(res) + '.jpg')
-        pl.image(avatar, caption = 'Profile picture')
+        show_alt1 = show_alt.button('Show alternative')
+            #alt = st.sidebar.selectbox('Alternative profile ', ['current', '1','2','3'])
+            #
+        if show_alt1:
+            res = ovr['id'].iloc[1]
+            logging.info(res)
+            avatar = Image.open(race + '/' + str(res) + '.jpg')
+            pl.image(avatar, caption = 'Profile picture')
 
         # if alt == '1':
         #     res = ovr['id'].iloc[1]
