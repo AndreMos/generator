@@ -63,10 +63,10 @@ def main():
         col2.subheader('Surname: ' + sn)
         col2.subheader('Location: ' )
         col3.subheader('Other meta-data')
-        show_alt = show_alt.sidebar.button('Show alternative')
+        show_alt1 = show_alt.sidebar.button('Show alternative')
         #alt = st.sidebar.selectbox('Alternative profile ', ['current', '1','2','3'])
         #
-    if show_alt:
+    if show_alt1:
         res = ovr['id'].iloc[1]
         avatar = Image.open(race + '/' + str(res) + '.jpg')
         pl.image(avatar, caption = 'Profile picture')
