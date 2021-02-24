@@ -64,9 +64,10 @@ def main():
         col2.subheader('Location: ' )
         col3.subheader('Other meta-data')
 
+        alt = st.sidebar.selectbox('Alternative profile ', ['current', '1','2','3'])
         show_alt = st.sidebar.button('Show alternative')
         if show_alt:
-            alt = col1.selectbox('Alternative profile ', ['current', '1','2','3'])
+
             if alt == '1':
                 res = ovr['id'].iloc[1]
                 avatar = Image.open(race + '/' + str(res) + '.jpg')
