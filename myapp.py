@@ -65,21 +65,21 @@ def main():
         col3.subheader('Other meta-data')
 
         alt = st.sidebar.selectbox('Alternative profile ', ['current', '1','2','3'])
-        show_alt = st.sidebar.button('Show alternative')
-        if show_alt:
+        #show_alt = st.sidebar.button('Show alternative')
+        #if show_alt:
 
-            if alt == '1':
-                res = ovr['id'].iloc[1]
-                avatar = Image.open(race + '/' + str(res) + '.jpg')
-                pl.image(avatar, caption = 'Profile picture')
-            elif alt == '2':
-                res = ovr['id'].iloc[2]
-                avatar = Image.open(race + '/' + str(res) + '.jpg')
-                pl.image(avatar, caption = 'Profile picture')
-            elif alt == '3':
-                res = ovr['id'].iloc[3]
-                avatar = Image.open(race + '/' + str(res) + '.jpg')
-                pl.image(avatar, caption = 'Profile picture')
+        if alt == '1':
+            res = ovr['id'].iloc[1]
+            avatar = Image.open(race + '/' + str(res) + '.jpg')
+            pl.image(avatar, caption = 'Profile picture')
+        elif alt == '2':
+            res = ovr['id'].iloc[2]
+            avatar = Image.open(race + '/' + str(res) + '.jpg')
+            pl.image(avatar, caption = 'Profile picture')
+        elif alt == '3':
+            res = ovr['id'].iloc[3]
+            avatar = Image.open(race + '/' + str(res) + '.jpg')
+            pl.image(avatar, caption = 'Profile picture')
 
     os.chdir('/app/generator/')
 
