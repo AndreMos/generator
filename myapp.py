@@ -69,6 +69,7 @@ def main():
         #
     if show_alt1:
         res = ovr['id'].iloc[1]
+        logging.info(res)
         avatar = Image.open(race + '/' + str(res) + '.jpg')
         pl.image(avatar, caption = 'Profile picture')
 
