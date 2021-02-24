@@ -42,7 +42,7 @@ def main():
     slider = st.sidebar.select_slider('Age', ['Child', 'Teen', 'Adult', 'Old'])
     gen = st.sidebar.radio('Gender',['Male', "Female"])
     but = st.sidebar.button('Generate profile')
-    alt = 0
+    os.chdir('/app/generator/new_generator1')
     if but:
         h = names[names['name'].str.find(name)!=-1]['type']
         if h.shape[0] > 0:
@@ -54,7 +54,7 @@ def main():
         logging.info([gender,age,race])
         ovr = dataset[(dataset['race'] == race) & (dataset['age'] == age) & (dataset['gender'] == gender)].sample(4)
         res = ovr['id'].iloc[0]
-        os.chdir('/app/generator/new_generator1')
+
         avatar = Image.open(race + '/' + str(res) + '.jpg')
         pl = col1.empty()
         pl.image(avatar, caption = 'Profile picture')
@@ -62,7 +62,7 @@ def main():
         col2.subheader('Surname: ' + sn)
         col2.subheader('Location: ' )
         col3.subheader('Other meta-data')
-        alt = col1.selectbox('Alternative profile ', ['current', '1','2','3'])
+    alt = col1.selectbox('Alternative profile ', ['current', '1','2','3'])
     if alt == '1':
         res = ovr['id'].iloc[1]
         avatar = Image.open(race + '/' + str(res) + '.jpg')
