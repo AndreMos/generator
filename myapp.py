@@ -53,6 +53,7 @@ def main():
         logging.info([gender,age,race])
         ovr = dataset[(dataset['race'] == race) & (dataset['age'] == age) & (dataset['gender'] == gender)].sample(4)
         res = ovr['id'].iloc[0]
+        os.chdir('/app/generator/new_generator1')
         avatar = Image.open(race + '/' + str(res) + '.jpg')
         pl = col1.empty()
         pl.image(avatar, caption = 'Profile picture')
@@ -73,6 +74,8 @@ def main():
             res = ovr['id'].iloc[3]
             avatar = Image.open(race + '/' + str(res) + '.jpg')
             pl.image(avatar, caption = 'Profile picture')
+
+    os.chdir('/app/generator/')
 
 
     # if submit:
