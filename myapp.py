@@ -40,6 +40,7 @@ def main():
     name = st.sidebar.text_input('Name', 'John')
     sn = st.sidebar.text_input('Surname', 'Johnson')
     slider = st.sidebar.select_slider('Age', ['Child', 'Teen', 'Adult', 'Old'])
+    li = ['child', 'teen', 'adult', 'old']
     gen = st.sidebar.radio('Gender',['Male', "Female"])
     but = st.sidebar.button('Generate profile')
     show_alt = st.sidebar.empty()
@@ -54,7 +55,16 @@ def main():
         age = slider.lower()
         gender = gen.lower()
         #logging.info([gender,age,race])
-        ovr = dataset[(dataset['race'] == race) & (dataset['age'] == age) & (dataset['gender'] == gender)].sample(4)
+        try:
+            ovr = dataset[(dataset['race'] == race) & (dataset['age'] == age) & (dataset['gender'] == gender)].sample(4)
+        except:
+            new_age_idx = li.index(age)
+            if new_age_idx == len(li) - 1:
+                new_age = li[new_age_idx - 1]
+                ovr = dataset[(dataset['race'] == race) & (dataset['age'] == new_age) & (dataset['gender'] == gender)].sample(4)
+            else:
+                new_age = li[new_age_idx + 1]
+                ovr = dataset[(dataset['race'] == race) & (dataset['age'] == new_age) & (dataset['gender'] == gender)].sample(4)
         res = ovr['id'].iloc[0]
 
         avatar = Image.open(race + '/' + str(res) + '.jpg')
@@ -64,14 +74,14 @@ def main():
         col2.subheader('Surname: ' + sn)
         col2.subheader('Location: ' )
         col3.subheader('Other meta-data')
-        show_alt1 = show_alt.button('Show alternative')
-            #alt = st.sidebar.selectbox('Alternative profile ', ['current', '1','2','3'])
-            #
-        if show_alt1:
-            res = ovr['id'].iloc[1]
-            logging.info(res)
-            avatar = Image.open(race + '/' + str(res) + '.jpg')
-            pl.image(avatar, caption = 'Profile picture')
+        # show_alt1 = show_alt.button('Show alternative')
+        #     #alt = st.sidebar.selectbox('Alternative profile ', ['current', '1','2','3'])
+        #     #
+        # if show_alt1:
+        #     res = ovr['id'].iloc[1]
+        #     logging.info(res)
+        #     avatar = Image.open(race + '/' + str(res) + '.jpg')
+        #     pl.image(avatar, caption = 'Profile picture')
 
         # if alt == '1':
         #     res = ovr['id'].iloc[1]
