@@ -42,7 +42,8 @@ def main():
     slider = st.sidebar.select_slider('Age', ['Child', 'Teen', 'Adult', 'Old'])
     gen = st.sidebar.radio('Gender',['Male', "Female"])
     but = st.sidebar.button('Generate profile')
-    show_alt = col1.empty()#.sidebar.button('Show alternative')
+    show_alt = col1.empty()
+    show_alt1 = False#.sidebar.button('Show alternative')
     os.chdir('/app/generator/new_generator1')
     if but:
         h = names[names['name'].str.find(name)!=-1]['type']
