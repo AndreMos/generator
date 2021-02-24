@@ -66,7 +66,7 @@ def main():
             res = ovr['id'].iloc[1]
             avatar = Image.open(race + '/' + str(res) + '.jpg')
             pl.image(avatar, caption = 'Profile picture')
-        elif alf == '2':
+        elif alt == '2':
             res = ovr['id'].iloc[2]
             avatar = Image.open(race + '/' + str(res) + '.jpg')
             pl.image(avatar, caption = 'Profile picture')
