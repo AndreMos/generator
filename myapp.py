@@ -53,7 +53,7 @@ def main():
             race = 'White'
         age = slider.lower()
         gender = gen.lower()
-        logging.info([gender,age,race])
+        #logging.info([gender,age,race])
         ovr = dataset[(dataset['race'] == race) & (dataset['age'] == age) & (dataset['gender'] == gender)].sample(4)
         res = ovr['id'].iloc[0]
 
@@ -64,7 +64,7 @@ def main():
         col2.subheader('Surname: ' + sn)
         col2.subheader('Location: ' )
         col3.subheader('Other meta-data')
-        show_alt1 = show_alt.button('Show alternative')
+    show_alt1 = show_alt.button('Show alternative')
         #alt = st.sidebar.selectbox('Alternative profile ', ['current', '1','2','3'])
         #
     if show_alt1:
