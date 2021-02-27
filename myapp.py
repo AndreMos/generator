@@ -69,6 +69,7 @@ def main():
         else:
             bn = sample(final_bn, age = age, gender = gen)
         res = bn.sample(3)
+        res
         #bn.T.iloc[:,4:-1]
         for rec in np.array_split(res,3):
             name = res['names'].iloc[0]
@@ -81,11 +82,11 @@ def main():
             age1 = res['age'].iloc[0]
             #aage
             col1.markdown(f'**Name**: {name}')
-            col1.subheader(educ)
-            col1.subheader(fam)
+            col1.subheader(f'**High education:** {educ}')
+            col1.subheader(f'**Family status: ** {fam}')
 
-            col2.subheader(' '.join(idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values))
-            col2.subheader(age1)
+            col2.subheader(f"**User interests:** {' '.join(idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values)}")
+            col2.subheader(f'**Age:** {age1}')
 
         # os.chdir('/app/generator/new_generator1')
         # h = names[names['name'].str.find(name)!=-1]['type']
