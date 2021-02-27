@@ -80,7 +80,7 @@ def main():
         else:
             bn = sample(final_bn, age = age, gender = gen)
         res = bn.sample(3)
-        #res
+        res1 = res
         #bn.T.iloc[:,4:-1]
         for rec in np.array_split(res,3):
             name = rec['names'].iloc[0]
@@ -113,6 +113,7 @@ def main():
             avatar = Image.open(race + '/' + str(res) + '.jpg')
             col1.image(avatar, caption = 'Profile picture')
             os.chdir('/app/generator/')
+            res1
         # #age = slider.lower()
         # gender = gen.lower()
         # #logging.info([gender,age,race])
