@@ -26,26 +26,34 @@ def main():
     # pred_cl=pred(bert, classif,story,tokenizer)
     # dicti={'0':'Досуг', '1':'Искусство и культура', '2':'Карьера','3': 'Коммуникации',
     #   '4': 'Наука','5': 'Обучение', '6':'Спорт', '7':'Стартапы'}
-    dataset, names, final_bn = load()
-    gg = pd.read_csv('key_words_groups_interests.csv')
-    gg
+    dataset, names, final_bn, idx_to_interest = load()
+
     #df = sample(final_bn)
     #df
     col1, col2, col3 = st.beta_columns(3)
     #col1.title('Avatar here')
     #story = col2.text_area('Insert news')
     #col2.title('Meta-info here')#
-    name = st.sidebar.text_input('Name', 'John')
-    logging.info(type(name))
-    sn = st.sidebar.text_input('Surname', 'Johnson')
-    slider = st.sidebar.select_slider('Age', ['Child', 'Teen', 'Adult', 'Old'])
-    li = ['child', 'teen', 'adult', 'old']
-    gen = st.sidebar.radio('Gender',['Male', "Female"])
-    but = st.sidebar.button('Generate profile')
-    show_alt = st.sidebar.empty()
-    show_alt1 = False#.sidebar.button('Show alternative')
+    #name = st.sidebar.text_input('Name', 'John')
+    
+    #sn = st.sidebar.text_input('Surname', 'Johnson')
+    slider = st.sidebar.selectbox('Age', ['not specified', 'Teen', 'Adult', 'Old'])
+    #slider = st.sidebar.select_slider('Age', ['Child', 'Teen', 'Adult', 'Old'])
+    li = ['teen', 'adult', 'old']
+    gen = st.sidebar.radio('Gender',['not specified', 'Male', "Female"])
+    but = st.sidebar.button('Generate profiles')
     os.chdir('/app/generator/new_generator1')
     if but:
+        #sample
+        if slider == 'not specified' and  gen == 'not specified':
+            bn = sample(final_bn)
+        elif slider == 'not specified':
+            bn = rr
+        elif gen == 'not specified':
+            bn = gg
+        else:
+            bn =
+
         h = names[names['name'].str.find(name)!=-1]['type']
         if h.shape[0] > 0:
             race = h.iloc[0]
@@ -107,6 +115,7 @@ def load():
     skel = read_structure('K2_bn_structure')
     params = read_params('K2_bn_param')
     final_bn = HyBayesianNetwork(skel, params)
+    idx_to_interest = pd.read_csv('key_words_groups_interests.csv')
     logging.info('BN downloaded')
     url = 'https://drive.google.com/uc?id=1NQIXdma7J0HJ6WfU0Z7VUcF_ypoJ9UrN'
     output = 'modulus.zip'
@@ -120,7 +129,7 @@ def load():
     dataset['id'] = dataset['id'].astype(int)
     names = pd.read_csv(stri + 'names.csv')
 
-    return dataset, names, final_bn
+    return dataset, names, final_bn, idx_to_interest
 
     #return Gs
 
