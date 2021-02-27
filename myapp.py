@@ -13,6 +13,7 @@ import argparse
 
 import zipfile
 import logging
+os.chdir('/app/generator/')
 #os.chdir('/app/generator/')
 from train.save_bn import read_params, read_structure
 from train.sampling import generate_synthetics, get_probability, sample
