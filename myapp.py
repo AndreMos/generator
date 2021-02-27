@@ -114,7 +114,10 @@ def main():
             else:
                 race = 'White'
             try:
-                ovr = dataset[(dataset['race'] == race) & (dataset['age'] == fold(age1)) & (dataset['gender'] == gender)].sample(1)
+                logging.info(race, fold(age1),gender)
+                ovr = dataset[(dataset['race'] == race) & (dataset['age'] == fold(age1)) & (dataset['gender'] == gender)]
+                logging.info(ovr.shape)#
+                ovr = ovr.sample(1)
             except:
                 logging.info(race, fold(age1),gender)
                 print(race, fold(age1),gender)
