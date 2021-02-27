@@ -36,7 +36,7 @@ def main():
     #story = col2.text_area('Insert news')
     #col2.title('Meta-info here')#
     name = st.sidebar.text_input('Name', 'John')
-    logging.info(name)
+    logging.info(type(name))
     sn = st.sidebar.text_input('Surname', 'Johnson')
     slider = st.sidebar.select_slider('Age', ['Child', 'Teen', 'Adult', 'Old'])
     li = ['child', 'teen', 'adult', 'old']
