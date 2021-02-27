@@ -27,6 +27,16 @@ def main():
     # pred_cl=pred(bert, classif,story,tokenizer)
     # dicti={'0':'Досуг', '1':'Искусство и культура', '2':'Карьера','3': 'Коммуникации',
     #   '4': 'Наука','5': 'Обучение', '6':'Спорт', '7':'Стартапы'}
+    dicti_fam = {
+    1 : 'single',
+    2 : 'in a relationship',
+    3 : 'engaged',
+    4 : 'married',
+    5 : "it's complicated",
+    6 : 'actively searching',
+    7 : 'in love'
+    }
+    dicti_educ = {0 : 'No', 1 : 'Yes'}
     dataset, names, final_bn, idx_to_interest = load()
 
     #df = sample(final_bn)
@@ -57,41 +67,49 @@ def main():
         else:
             bn = sample(final_bn, age = age, gender = gen)
         res = bn.sample(3)
-        bn.iloc[:,4:-1]
+        #bn.T.iloc[:,4:-1]
         for rec in np.array_split(res,3):
             name = res['names'].iloc[0]
-            educ = res['has_high_education'].iloc[0]
-            fam = res['relation'].iloc[0]
+            educ = dicti_educ[res['has_high_education'].iloc[0]]
+            fam = dicti_fam[res['relation'].iloc[0]]
+            inter = res.iloc[0,4:-1].sort_values( ascending = False)[:4]
+            age1 = res['age'].iloc[0]
             #aage
+            col1.subheader(name)
+            col1.subheader(educ)
+            col1.subheader(fam)
 
-        os.chdir('/app/generator/new_generator1')
-        h = names[names['name'].str.find(name)!=-1]['type']
-        if h.shape[0] > 0:
-            race = h.iloc[0]
-        else:
-            race = 'White'
-        age = slider.lower()
-        gender = gen.lower()
-        #logging.info([gender,age,race])
-        try:
-            ovr = dataset[(dataset['race'] == race) & (dataset['age'] == age) & (dataset['gender'] == gender)].sample(4)
-        except:
-            new_age_idx = li.index(age)
-            if new_age_idx == len(li) - 1:
-                new_age = li[new_age_idx - 1]
-                ovr = dataset[(dataset['race'] == race) & (dataset['age'] == new_age) & (dataset['gender'] == gender)].sample(4)
-            else:
-                new_age = li[new_age_idx + 1]
-                ovr = dataset[(dataset['race'] == race) & (dataset['age'] == new_age) & (dataset['gender'] == gender)].sample(4)
-        res = ovr['id'].iloc[0]
+            col2.subheader(inter)
+            col2.subheader(age1)
 
-        avatar = Image.open(race + '/' + str(res) + '.jpg')
-        pl = col1.empty()
-        pl.image(avatar, caption = 'Profile picture')
-        col2.subheader("Name: " + name)
-        col2.subheader('Surname: ' + sn)
-        col2.subheader('Location: ' )
-        col3.subheader('Other meta-data')
+        # os.chdir('/app/generator/new_generator1')
+        # h = names[names['name'].str.find(name)!=-1]['type']
+        # if h.shape[0] > 0:
+        #     race = h.iloc[0]
+        # else:
+        #     race = 'White'
+        # #age = slider.lower()
+        # gender = gen.lower()
+        # #logging.info([gender,age,race])
+        # try:
+        #     ovr = dataset[(dataset['race'] == race) & (dataset['age'] == age) & (dataset['gender'] == gender)].sample(4)
+        # except:
+        #     new_age_idx = li.index(age)
+        #     if new_age_idx == len(li) - 1:
+        #         new_age = li[new_age_idx - 1]
+        #         ovr = dataset[(dataset['race'] == race) & (dataset['age'] == new_age) & (dataset['gender'] == gender)].sample(4)
+        #     else:
+        #         new_age = li[new_age_idx + 1]
+        #         ovr = dataset[(dataset['race'] == race) & (dataset['age'] == new_age) & (dataset['gender'] == gender)].sample(4)
+        # res = ovr['id'].iloc[0]
+        #
+        # avatar = Image.open(race + '/' + str(res) + '.jpg')
+        # pl = col1.empty()
+        # pl.image(avatar, caption = 'Profile picture')
+        # col2.subheader("Name: " + name)
+        # col2.subheader('Surname: ' + sn)
+        # col2.subheader('Location: ' )
+        # col3.subheader('Other meta-data')
         # show_alt1 = show_alt.button('Show alternative')
         #     #alt = st.sidebar.selectbox('Alternative profile ', ['current', '1','2','3'])
         #     #
