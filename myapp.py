@@ -73,7 +73,7 @@ def main():
             name = res['names'].iloc[0]
             educ = dicti_educ[res['has_high_education'].iloc[0]]
             fam = dicti_fam[res['relation'].iloc[0]]
-            inter = res.iloc[0,4:-1].sort_values( ascending = False)[:4]
+            inter = res.astype(int).iloc[0,4:-1].sort_values( ascending = False)[:4]
             age1 = res['age'].iloc[0]
             #aage
             col1.subheader(name)
