@@ -59,6 +59,7 @@ def main():
         age = slider.lower()
         #gender = gen.lower()
         #sample
+
         if slider == 'not specified' and  gen == 'not specified':
             bn = sample(final_bn)
         elif age == 'not specified':
@@ -73,7 +74,8 @@ def main():
             name = res['names'].iloc[0]
             educ = dicti_educ[res['has_high_education'].iloc[0]]
             fam = dicti_fam[res['relation'].iloc[0]]
-            inter = res.iloc[0,5:-1].sort_values( ascending = False)[:4]
+            inter = res.iloc[0,5:-1].sort_values( ascending = False)[:4].index.values
+
             #inter
             #inter.sort_values( ascending = False)[:4]
             age1 = res['age'].iloc[0]
@@ -82,7 +84,7 @@ def main():
             col1.subheader(educ)
             col1.subheader(fam)
 
-            col2.subheader(inter)
+            col2.subheader(idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values)
             col2.subheader(age1)
 
         # os.chdir('/app/generator/new_generator1')
