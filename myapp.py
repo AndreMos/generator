@@ -121,8 +121,10 @@ def main():
             except:
                 #logging.info((race, fold(age1),gender))
                 #(race, fold(age1),gender)
+                os.chdir('/app/generator/')
                 if fold(age1) == 'teen':
-                ovr = dataset[(dataset['race'] == race) & (dataset['age'] == 'child') & (dataset['gender'] == gender)].sample(1)
+                    ovr = dataset[(dataset['race'] == race) & (dataset['age'] == 'child') & (dataset['gender'] == gender)].sample(1)
+            os.chdir('/app/generator/new_generator1')
             res = ovr['id'].iloc[0]
             avatar = Image.open(race + '/' + str(res) + '.jpg')
             col1.image(avatar, caption = 'Profile picture')
