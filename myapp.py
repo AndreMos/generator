@@ -56,7 +56,14 @@ def main():
             bn = sample(final_bn, age = age)
         else:
             bn = sample(final_bn, age = age, gender = gen)
-        bn.sample(3)
+        res = bn.sample(3)
+        bn.iloc[:,[4:-1]]
+        for rec in np.array_split(res,3):
+            name = res['names'].iloc[0]
+            educ = res['has_high_education'].iloc[0]
+            fam = res['relation'].iloc[0]
+            #aage
+
         os.chdir('/app/generator/new_generator1')
         h = names[names['name'].str.find(name)!=-1]['type']
         if h.shape[0] > 0:
