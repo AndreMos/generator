@@ -35,25 +35,27 @@ def main():
     #story = col2.text_area('Insert news')
     #col2.title('Meta-info here')#
     #name = st.sidebar.text_input('Name', 'John')
-    
+
     #sn = st.sidebar.text_input('Surname', 'Johnson')
     slider = st.sidebar.selectbox('Age', ['not specified', 'Teen', 'Adult', 'Old'])
     #slider = st.sidebar.select_slider('Age', ['Child', 'Teen', 'Adult', 'Old'])
     li = ['teen', 'adult', 'old']
-    gen = st.sidebar.radio('Gender',['not specified', 'Male', "Female"])
+    gen = st.sidebar.radio('Gender', ['not specified', 'Male', "Female"])
     but = st.sidebar.button('Generate profiles')
     os.chdir('/app/generator/new_generator1')
     if but:
+        age = slider.lower()
+        #gender = gen.lower()
         #sample
         if slider == 'not specified' and  gen == 'not specified':
             bn = sample(final_bn)
-        elif slider == 'not specified':
-            bn = rr
+        elif age == 'not specified':
+            bn = sample(final_bn, gender = gen)
         elif gen == 'not specified':
-            bn = gg
+            bn = sample(final_bn, age = age)
         else:
-            bn =
-
+            bn = sample(final_bn, age = age, gender = gen)
+        bn.sample(3)
         h = names[names['name'].str.find(name)!=-1]['type']
         if h.shape[0] > 0:
             race = h.iloc[0]
