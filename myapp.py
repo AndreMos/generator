@@ -90,7 +90,7 @@ def main():
 
             #inter
             #inter.sort_values( ascending = False)[:4]
-            age1 = res['age'].iloc[0]
+            age1 = rec['age'].iloc[0]
             #aage
             col2.markdown(f'**Name** : {name}')
             col2.markdown(f'**Age: ** {age1}')
