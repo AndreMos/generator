@@ -48,7 +48,7 @@ def main():
     '7' : 'in love'
     }
     dicti_educ = {'0' : 'No', '1' : 'Yes'}
-    dicti_gen = {'1' : 'male', '2' : 'female'}
+    dicti_gen = {'1' : 'female', '2' : 'male'}
     dataset, names, final_bn, idx_to_interest = load()
 
     #df = sample(final_bn)
@@ -98,9 +98,11 @@ def main():
             col2.markdown(f'**Gender: ** {gender}')
             col2.markdown(f'**High education:** {educ}')
             col2.markdown(f'**Family status: ** {fam}')
+            col2.text(' ')
+            col2.text(' ')
 
             col3.markdown(f"**User interests:** {' '.join(idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values)}")
-
+            col3.text(' ')
 
             os.chdir('/app/generator/new_generator1')
             h = names[names['name'].str.find(name)!=-1]['type']
@@ -112,6 +114,7 @@ def main():
             res = ovr['id'].iloc[0]
             avatar = Image.open(race + '/' + str(res) + '.jpg')
             col1.image(avatar, caption = 'Profile picture')
+            col1.text(' ')
             os.chdir('/app/generator/')
             res1
         # #age = slider.lower()
