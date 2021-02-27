@@ -42,7 +42,7 @@ def main():
     li = ['teen', 'adult', 'old']
     gen = st.sidebar.radio('Gender', ['not specified', 'Male', "Female"])
     but = st.sidebar.button('Generate profiles')
-    os.chdir('/app/generator/new_generator1')
+
     if but:
         age = slider.lower()
         #gender = gen.lower()
@@ -56,6 +56,7 @@ def main():
         else:
             bn = sample(final_bn, age = age, gender = gen)
         bn.sample(3)
+        os.chdir('/app/generator/new_generator1')
         h = names[names['name'].str.find(name)!=-1]['type']
         if h.shape[0] > 0:
             race = h.iloc[0]
