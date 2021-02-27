@@ -28,15 +28,15 @@ def main():
     # dicti={'0':'Досуг', '1':'Искусство и культура', '2':'Карьера','3': 'Коммуникации',
     #   '4': 'Наука','5': 'Обучение', '6':'Спорт', '7':'Стартапы'}
     dicti_fam = {
-    1 : 'single',
-    2 : 'in a relationship',
-    3 : 'engaged',
-    4 : 'married',
-    5 : "it's complicated",
-    6 : 'actively searching',
-    7 : 'in love'
+    '1' : 'single',
+    '2' : 'in a relationship',
+    '3' : 'engaged',
+    '4' : 'married',
+    '5' : "it's complicated",
+    '6' : 'actively searching',
+    '7' : 'in love'
     }
-    dicti_educ = {0 : 'No', 1 : 'Yes'}
+    dicti_educ = {'0' : 'No', '1' : 'Yes'}
     dataset, names, final_bn, idx_to_interest = load()
 
     #df = sample(final_bn)
