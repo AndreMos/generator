@@ -94,7 +94,7 @@ def main():
             #aage
             col2.markdown(f'**Name** : {name}')
             col2.markdown(f'**Age: ** {age1}')
-            col2.markdown(f'**Gender: ** {gender1}')
+            col2.markdown(f'**Gender: ** {gender}')
             col2.markdown(f'**High education:** {educ}')
             col2.markdown(f'**Family status: ** {fam}')
 
