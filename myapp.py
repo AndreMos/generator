@@ -75,14 +75,15 @@ def main():
             fam = dicti_fam[res['relation'].iloc[0]]
             inter = res.iloc[0,4:-1]#.sort_values( ascending = False)[:4]
             inter
+            inter.sort_values( ascending = False)[:4]
             age1 = res['age'].iloc[0]
             #aage
-            col1.subheader(name)
-            col1.subheader(educ)
-            col1.subheader(fam)
-
-            col2.subheader(inter)
-            col2.subheader(age1)
+            # col1.subheader(name)
+            # col1.subheader(educ)
+            # col1.subheader(fam)
+            #
+            # col2.subheader(inter)
+            # col2.subheader(age1)
 
         # os.chdir('/app/generator/new_generator1')
         # h = names[names['name'].str.find(name)!=-1]['type']
