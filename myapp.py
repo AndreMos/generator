@@ -116,7 +116,7 @@ def main():
             try:
                 ovr = dataset[(dataset['race'] == race) & (dataset['age'] == fold(age1)) & (dataset['gender'] == gender)].sample(1)
             except:
-                logging.info(race, fold(age1)),gender)
+                logging.info(race, fold(age1),gender)
                 if fold(age1) == 'teen':
                     ovr = dataset[(dataset['race'] == race) & (dataset['age'] == 'child') & (dataset['gender'] == gender)].sample(1)
             res = ovr['id'].iloc[0]
