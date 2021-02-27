@@ -100,8 +100,11 @@ def main():
             col2.markdown(f'**Family status: ** {fam}')
             col2.text(' ')
             col2.text(' ')
+            col2.text(' ')
+            col2.text(' ')
 
             col3.markdown(f"**User interests:** {' '.join(idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values)}")
+            col3.text(' ')
             col3.text(' ')
 
             os.chdir('/app/generator/new_generator1')
