@@ -80,11 +80,11 @@ def main():
             #inter.sort_values( ascending = False)[:4]
             age1 = res['age'].iloc[0]
             #aage
-            col1.subheader(name)
+            col1.markdown(f'**Name**: {name}')
             col1.subheader(educ)
             col1.subheader(fam)
 
-            col2.subheader(idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values)
+            col2.subheader(idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values.join(' '))
             col2.subheader(age1)
 
         # os.chdir('/app/generator/new_generator1')
