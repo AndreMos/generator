@@ -47,7 +47,7 @@ def main():
     '7' : 'in love'
     }
     dicti_educ = {'0' : 'No', '1' : 'Yes'}
-    dicti_gen = {'1' : 'male', '1' : 'female'}
+    dicti_gen = {'1' : 'male', '2' : 'female'}
     dataset, names, final_bn, idx_to_interest = load()
 
     #df = sample(final_bn)
