@@ -57,7 +57,7 @@ def main():
         else:
             bn = sample(final_bn, age = age, gender = gen)
         res = bn.sample(3)
-        bn.iloc[:,[4:-1]]
+        bn.iloc[:,4:-1]
         for rec in np.array_split(res,3):
             name = res['names'].iloc[0]
             educ = res['has_high_education'].iloc[0]
