@@ -109,6 +109,7 @@ def main():
                 race = 'White'
             ovr = dataset[(dataset['race'] == race) & (dataset['age'] == fold(age1)) & (dataset['gender'] == gender)].sample(1)
             res = ovr['id'].iloc[0]
+            avatar = Image.open(race + '/' + str(res) + '.jpg')
             col1.image(avatar, caption = 'Profile picture')
         # #age = slider.lower()
         # gender = gen.lower()
