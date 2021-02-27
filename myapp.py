@@ -36,6 +36,7 @@ def main():
     # pred_cl=pred(bert, classif,story,tokenizer)
     # dicti={'0':'Досуг', '1':'Искусство и культура', '2':'Карьера','3': 'Коммуникации',
     #   '4': 'Наука','5': 'Обучение', '6':'Спорт', '7':'Стартапы'}
+    os.chdir('/app/generator/')
     dicti_fam = {
     '0' : 'not specified',
     '1' : 'single',
@@ -111,6 +112,7 @@ def main():
             res = ovr['id'].iloc[0]
             avatar = Image.open(race + '/' + str(res) + '.jpg')
             col1.image(avatar, caption = 'Profile picture')
+            os.chdir('/app/generator/')
         # #age = slider.lower()
         # gender = gen.lower()
         # #logging.info([gender,age,race])
@@ -155,7 +157,7 @@ def main():
         #     avatar = Image.open(race + '/' + str(res) + '.jpg')
         #     pl.image(avatar, caption = 'Profile picture')
 
-    os.chdir('/app/generator/')
+
 
 
     # if submit:
