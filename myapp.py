@@ -1,17 +1,10 @@
 import streamlit as st
-#from transformers import AutoTokenizer, AutoModel
-#import numpy as np
-#import torch
-#import torch.nn as nn
 import argparse
 import numpy as np
 from PIL import Image
-# import dnnlib
-# import dnnlib.tflib as tflib
 import re
 import sys
 import pandas as pd
-# import pretrained_networks
 import gdown
 
 import os
@@ -21,7 +14,9 @@ import argparse
 import zipfile
 import logging
 #os.chdir('/app/generator/')
-
+from train.save_bn import read_params, read_structure
+from train.sampling import generate_synthetics, get_probability, sample
+from libpgm.hybayesiannetwork import HyBayesianNetwork
 
 
 
@@ -31,8 +26,9 @@ def main():
     # pred_cl=pred(bert, classif,story,tokenizer)
     # dicti={'0':'Досуг', '1':'Искусство и культура', '2':'Карьера','3': 'Коммуникации',
     #   '4': 'Наука','5': 'Обучение', '6':'Спорт', '7':'Стартапы'}
-    dataset, names = load()
-
+    dataset, names, final_bn = load()
+    df = sample(final_bn)
+    df
     col1, col2, col3 = st.beta_columns(3)
     #col1.title('Avatar here')
     #story = col2.text_area('Insert news')
@@ -105,6 +101,10 @@ def main():
     #     #write
 @st.cache(allow_output_mutation=True)
 def load():
+    skel = read_structure('K2_bn_structure')
+    params = read_params('K2_bn_param')
+    final_bn = HyBayesianNetwork(skel, params)
+    logging.info('BN downloaded')
     url = 'https://drive.google.com/uc?id=1NQIXdma7J0HJ6WfU0Z7VUcF_ypoJ9UrN'
     output = 'modulus.zip'
     logging.info('Start load')
@@ -116,7 +116,8 @@ def load():
     dataset = pd.read_csv(stri + 'dataset.csv')
     dataset['id'] = dataset['id'].astype(int)
     names = pd.read_csv(stri + 'names.csv')
-    return dataset, names
+
+    return dataset, names, final_bn
 
     #return Gs
 
