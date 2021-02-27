@@ -84,7 +84,7 @@ def main():
             col1.subheader(educ)
             col1.subheader(fam)
 
-            col2.subheader(idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values.join(' '))
+            col2.subheader(' '.join(idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values))
             col2.subheader(age1)
 
         # os.chdir('/app/generator/new_generator1')
