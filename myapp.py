@@ -20,7 +20,7 @@ from train.sampling import generate_synthetics, get_probability, sample
 from libpgm.hybayesiannetwork import HyBayesianNetwork
 
 def fold(age):
-    elif age <=20:
+    if age <=20:
         return 'child'
     elif age <= 45:
         return 'adult'
