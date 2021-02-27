@@ -22,7 +22,7 @@ from libpgm.hybayesiannetwork import HyBayesianNetwork
 def fold(age):
     age = int(age)
     if age <=20:
-        return 'child'
+        return 'teen'
     elif age <= 45:
         return 'adult'
     else:
@@ -114,14 +114,14 @@ def main():
             else:
                 race = 'White'
             try:
-                logging.info(race, fold(age1),gender)
+                logging.info((race, fold(age1),gender))
                 ovr = dataset[(dataset['race'] == race) & (dataset['age'] == fold(age1)) & (dataset['gender'] == gender)]
                 logging.info(ovr.shape)#
                 ovr = ovr.sample(1)
             except:
-                logging.info(race, fold(age1),gender)
-                print(race, fold(age1),gender)
-                #if fold(age1) == 'teen':
+                #logging.info((race, fold(age1),gender))
+                #(race, fold(age1),gender)
+                if fold(age1) == 'teen':
                 ovr = dataset[(dataset['race'] == race) & (dataset['age'] == 'child') & (dataset['gender'] == gender)].sample(1)
             res = ovr['id'].iloc[0]
             avatar = Image.open(race + '/' + str(res) + '.jpg')
