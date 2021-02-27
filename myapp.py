@@ -47,6 +47,7 @@ def main():
     '7' : 'in love'
     }
     dicti_educ = {'0' : 'No', '1' : 'Yes'}
+    dicti_gen = {'1' : 'male', '1' : 'female'}
     dataset, names, final_bn, idx_to_interest = load()
 
     #df = sample(final_bn)
@@ -85,13 +86,15 @@ def main():
             educ = dicti_educ[rec['has_high_education'].iloc[0]]
             fam = dicti_fam[rec['relation'].iloc[0]]
             inter = rec.iloc[0,5:-1].sort_values( ascending = False)[:4].index.values
+            gender = dicti_gen[rec['sex'].iloc[0]]
 
             #inter
             #inter.sort_values( ascending = False)[:4]
             age1 = res['age'].iloc[0]
             #aage
-            col2.markdown(f'**Name**: {name}')
-            col2.markdown(f'**Age:** {age1}')
+            col2.markdown(f'**Name** : {name}')
+            col2.markdown(f'**Age: ** {age1}')
+            col2.markdown(f'**Gender: ** {gender1}')
             col2.markdown(f'**High education:** {educ}')
             col2.markdown(f'**Family status: ** {fam}')
 
