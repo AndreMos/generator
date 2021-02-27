@@ -27,13 +27,16 @@ def main():
     # dicti={'0':'Досуг', '1':'Искусство и культура', '2':'Карьера','3': 'Коммуникации',
     #   '4': 'Наука','5': 'Обучение', '6':'Спорт', '7':'Стартапы'}
     dataset, names, final_bn = load()
-    df = sample(final_bn)
-    df
+    gg = pd.read_csv('key_words_groups_interests.csv')
+    gg
+    #df = sample(final_bn)
+    #df
     col1, col2, col3 = st.beta_columns(3)
     #col1.title('Avatar here')
     #story = col2.text_area('Insert news')
     #col2.title('Meta-info here')#
     name = st.sidebar.text_input('Name', 'John')
+    logging.info(name)
     sn = st.sidebar.text_input('Surname', 'Johnson')
     slider = st.sidebar.select_slider('Age', ['Child', 'Teen', 'Adult', 'Old'])
     li = ['child', 'teen', 'adult', 'old']
