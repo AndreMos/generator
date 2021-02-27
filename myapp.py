@@ -19,7 +19,15 @@ from train.save_bn import read_params, read_structure
 from train.sampling import generate_synthetics, get_probability, sample
 from libpgm.hybayesiannetwork import HyBayesianNetwork
 
-
+def fold(age):
+    elif age <=20:
+        return 'child'
+    elif age <= 45:
+        return 'adult'
+    else:
+        return 'old'
+    # else:
+    # return 3
 
 def main():
     # story ='Я люблю тебя'
@@ -69,31 +77,35 @@ def main():
         else:
             bn = sample(final_bn, age = age, gender = gen)
         res = bn.sample(3)
-        res
+        #res
         #bn.T.iloc[:,4:-1]
         for rec in np.array_split(res,3):
-            name = res['names'].iloc[0]
-            educ = dicti_educ[res['has_high_education'].iloc[0]]
-            fam = dicti_fam[res['relation'].iloc[0]]
-            inter = res.iloc[0,5:-1].sort_values( ascending = False)[:4].index.values
+            name = rec['names'].iloc[0]
+            educ = dicti_educ[rec['has_high_education'].iloc[0]]
+            fam = dicti_fam[rec['relation'].iloc[0]]
+            inter = rec.iloc[0,5:-1].sort_values( ascending = False)[:4].index.values
 
             #inter
             #inter.sort_values( ascending = False)[:4]
             age1 = res['age'].iloc[0]
             #aage
-            col1.markdown(f'**Name**: {name}')
-            col1.subheader(f'**High education:** {educ}')
-            col1.subheader(f'**Family status: ** {fam}')
+            col2.markdown(f'**Name**: {name}')
+            col2.markdown(f'**Age:** {age1}')
+            col2.markdown(f'**High education:** {educ}')
+            col2.markdown(f'**Family status: ** {fam}')
 
-            col2.subheader(f"**User interests:** {' '.join(idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values)}")
-            col2.subheader(f'**Age:** {age1}')
+            col3.markdown(f"**User interests:** {' '.join(idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values)}")
 
-        # os.chdir('/app/generator/new_generator1')
-        # h = names[names['name'].str.find(name)!=-1]['type']
-        # if h.shape[0] > 0:
-        #     race = h.iloc[0]
-        # else:
-        #     race = 'White'
+
+            os.chdir('/app/generator/new_generator1')
+            h = names[names['name'].str.find(name)!=-1]['type']
+            if h.shape[0] > 0:
+                race = h.iloc[0]
+            else:
+                race = 'White'
+            ovr = dataset[(dataset['race'] == race) & (dataset['age'] == fold(age1)) & (dataset['gender'] == gender)].sample(1)
+            res = ovr['id'].iloc[0]
+            col1.image(avatar, caption = 'Profile picture')
         # #age = slider.lower()
         # gender = gen.lower()
         # #logging.info([gender,age,race])
