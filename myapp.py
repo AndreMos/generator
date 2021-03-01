@@ -58,7 +58,7 @@ def get_table_download_link(df):
     """
     csv = df.to_csv(index=False)
     b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
-    href = f'<a href="data:file/csv;base64,{b64}" download="synthetic_data.csv">Download csv file</a>'
+    href = f'<a href="data:file/csv;base64,{b64}" download="synthetic_data.csv">Download generated synthetic dataset</a>'
     return href
 
 def main():
