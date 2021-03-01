@@ -6,6 +6,7 @@ import re
 import sys
 import pandas as pd
 import gdown
+import base64
 
 import os
 import sys
@@ -49,6 +50,16 @@ def sam(bn):
     h3 = bn.sample(counter)
     arr.append(h3)
     return pd.concat(arr, axis = 0)
+
+def get_table_download_link(df):
+    """Generates a link allowing the data in a given panda dataframe to be downloaded
+    in:  dataframe
+    out: href string
+    """
+    csv = df.to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
+    href = f'<a href="data:file/csv;base64,{b64}">Download csv file</a>'
+    #return href
 
 def main():
     # story ='Я люблю тебя'
@@ -150,7 +161,7 @@ def main():
             col1.image(avatar, caption = 'Profile picture')
             col1.text(' ')
             os.chdir('/app/generator/')
-            bn
+        st.markdown(get_table_download_link(bn), unsafe_allow_html=True)
             #res1
         # #age = slider.lower()
         # gender = gen.lower()
