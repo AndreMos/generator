@@ -118,6 +118,7 @@ def main():
         # bn['relation'] = bn['relation'].astype(int).astype(str)
         # bn['sex'] = bn['sex'].astype(int).astype(str)
         res1 = res
+        logging.info("Synt shape: ", res.shape)
         #res.dtypes
         #bn.T.iloc[:,4:-1]
 
