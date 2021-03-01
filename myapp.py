@@ -112,9 +112,9 @@ def main():
         else:
             bn = sample(final_bn, age = age, gender = gen)
         #res = sam(bn)
-        bn['has_high_education'] = bn['has_high_education'].astype(str)
-        bn['relation'] = bn['relation'].astype(str)
-        bn['sex'] = bn['sex'].astype(str)
+        bn['has_high_education'] = bn['has_high_education'].astype(int).astype(str)
+        bn['relation'] = bn['relation'].astype(int).astype(str)
+        bn['sex'] = bn['sex'].astype(int).astype(str)
         res = bn
         #res1 = res
         #res.dtypes
