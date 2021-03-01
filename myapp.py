@@ -31,7 +31,7 @@ def fold(age):
 def sam(bn):
     bn = bn.copy()
     counter = 3
-    logging.info(bn.shape)
+    logging.info('BN shape: ',bn.shape)
     arr = []
     if bn[bn['has_high_education'] == 1].shape[0] != 0:
         h1 = bn[bn['has_high_education'] == 1].sample(1)
@@ -150,7 +150,8 @@ def main():
             col1.image(avatar, caption = 'Profile picture')
             col1.text(' ')
             os.chdir('/app/generator/')
-            res1
+            bn
+            #res1
         # #age = slider.lower()
         # gender = gen.lower()
         # #logging.info([gender,age,race])
