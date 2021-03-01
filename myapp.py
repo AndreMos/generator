@@ -1,21 +1,18 @@
-import streamlit as st
-import argparse
-import numpy as np
-from PIL import Image
 import re
 import sys
-import pandas as pd
-import gdown
-import base64
-
 import os
-import sys
 import argparse
-
 import zipfile
 import logging
-os.chdir('/app/generator/')
-#os.chdir('/app/generator/')
+import base64
+from pathlib import Path
+
+import streamlit as st
+import numpy as np
+from PIL import Image
+import pandas as pd
+import gdown
+
 from train.save_bn import read_params, read_structure
 from train.sampling import generate_synthetics, get_probability, sample
 from libpgm.hybayesiannetwork import HyBayesianNetwork
@@ -38,14 +35,11 @@ def sam(bn):
         h1 = bn[bn['has_high_education'] == '1'].sample(1)
         bn.drop(h1.index.values, axis = 0, inplace = True)
         arr.append(h1)
-#    else:
         counter -= 1
-
     if bn[bn['relation'] != 0].shape[0] != '0':
         h2 = bn[bn['relation'] != '0'].sample(1)
         bn.drop(h2.index.values, axis = 0, inplace = True)
         arr.append(h2)
-#    else:
         counter -= 1
     h3 = bn.sample(counter)
     arr.append(h3)
@@ -65,12 +59,8 @@ def reg_columns():
     return st.beta_columns(3)
 
 def main():
-    # story ='Я люблю тебя'
-    # bert, classif,tokenizer = load_components()
-    # pred_cl=pred(bert, classif,story,tokenizer)
-    # dicti={'0':'Досуг', '1':'Искусство и культура', '2':'Карьера','3': 'Коммуникации',
-    #   '4': 'Наука','5': 'Обучение', '6':'Спорт', '7':'Стартапы'}
-    os.chdir('/app/generator/')
+    #os.chdir('/app/generator/')
+    path = Path(__file__).parent
     dicti_fam = {
     '0' : 'not specified',
     '1' : 'single',
@@ -84,14 +74,6 @@ def main():
     dicti_educ = {'0' : 'No', '1' : 'Yes'}
     dicti_gen = {'1' : 'female', '2' : 'male'}
     dataset, names, w_names, final_bn, idx_to_interest = load()
-
-    #df = sample(final_bn)
-    #df
-    #col1, col2, col3 = st.beta_columns(3)
-    #col1.title('Avatar here')
-    #story = col2.text_area('Insert news')
-    #col2.title('Meta-info here')#
-    #name = st.sidebar.text_input('Name', 'John')
 
     #sn = st.sidebar.text_input('Surname', 'Johnson')
     slider = st.sidebar.selectbox('Age', ['not specified', 'Teen', 'Adult', 'Old'])
@@ -114,13 +96,9 @@ def main():
         else:
             bn = sample(final_bn, age = age, gender = gen, names = names, white_names = w_names )
         res = sam(bn)
-        # bn['has_high_education'] = bn['has_high_education'].astype(int).astype(str)
-        # bn['relation'] = bn['relation'].astype(int).astype(str)
-        # bn['sex'] = bn['sex'].astype(int).astype(str)
         res1 = res
         logging.info("Synt shape: " + str(res.shape))
-        #res.dtypes
-        #bn.T.iloc[:,4:-1]
+
 
         for rec in np.array_split(res,res.shape[0]):
             col1, col2, col3 = reg_columns()
@@ -162,8 +140,6 @@ def main():
                 logging.info(ovr.shape)#
                 ovr = ovr.sample(1)
             except:
-                #logging.info((race, fold(age1),gender))
-                #(race, fold(age1),gender)
                 os.chdir('/app/generator/')
                 if fold(age1) == 'teen':
                     ovr = dataset[(dataset['race'] == race) & (dataset['age'] == 'child') & (dataset['gender'] == gender)].sample(1)
@@ -174,67 +150,16 @@ def main():
             col1.text(' ')
             os.chdir('/app/generator/')
         st.markdown(get_table_download_link(bn), unsafe_allow_html=True)
-            #res1
-        # #age = slider.lower()
-        # gender = gen.lower()
-        # #logging.info([gender,age,race])
-        # try:
-        #     ovr = dataset[(dataset['race'] == race) & (dataset['age'] == age) & (dataset['gender'] == gender)].sample(4)
-        # except:
-        #     new_age_idx = li.index(age)
-        #     if new_age_idx == len(li) - 1:
-        #         new_age = li[new_age_idx - 1]
-        #         ovr = dataset[(dataset['race'] == race) & (dataset['age'] == new_age) & (dataset['gender'] == gender)].sample(4)
-        #     else:
-        #         new_age = li[new_age_idx + 1]
-        #         ovr = dataset[(dataset['race'] == race) & (dataset['age'] == new_age) & (dataset['gender'] == gender)].sample(4)
-        # res = ovr['id'].iloc[0]
-        #
-        # avatar = Image.open(race + '/' + str(res) + '.jpg')
-        # pl = col1.empty()
-        # pl.image(avatar, caption = 'Profile picture')
-        # col2.subheader("Name: " + name)
-        # col2.subheader('Surname: ' + sn)
-        # col2.subheader('Location: ' )
-        # col3.subheader('Other meta-data')
-        # show_alt1 = show_alt.button('Show alternative')
-        #     #alt = st.sidebar.selectbox('Alternative profile ', ['current', '1','2','3'])
-        #     #
-        # if show_alt1:
-        #     res = ovr['id'].iloc[1]
-        #     logging.info(res)
-        #     avatar = Image.open(race + '/' + str(res) + '.jpg')
-        #     pl.image(avatar, caption = 'Profile picture')
 
-        # if alt == '1':
-        #     res = ovr['id'].iloc[1]
-        #     avatar = Image.open(race + '/' + str(res) + '.jpg')
-        #     pl.image(avatar, caption = 'Profile picture')
-        # elif alt == '2':
-        #     res = ovr['id'].iloc[2]
-        #     avatar = Image.open(race + '/' + str(res) + '.jpg')
-        #     pl.image(avatar, caption = 'Profile picture')
-        # elif alt == '3':
-        #     res = ovr['id'].iloc[3]
-        #     avatar = Image.open(race + '/' + str(res) + '.jpg')
-        #     pl.image(avatar, caption = 'Profile picture')
-
-
-
-
-    # if submit:
-    #     class_res = process(story)
-    #     st.subheader(dicti[str(class_res)])
-    #     #write
 @st.cache(allow_output_mutation=True)
 def load():
+    path = Path(__file__).parent
     skel = read_structure('K2_bn_structure')
     params = read_params('K2_bn_param')
     final_bn = HyBayesianNetwork(skel, params)
     idx_to_interest = pd.read_csv('key_words_groups_interests.csv')
 
-    # names = pd.read_csv('data/names.csv')
-    white_names = pd.read_csv('data/white_names.csv')
+    white_names = pd.read_csv(path / 'data/white_names.csv')
     logging.info('BN downloaded')
     url = 'https://drive.google.com/uc?id=1NQIXdma7J0HJ6WfU0Z7VUcF_ypoJ9UrN'
     output = 'modulus.zip'
@@ -243,8 +168,9 @@ def load():
     with zipfile.ZipFile('modulus.zip', 'r') as zip_ref:
         zip_ref.extractall()
 
-    stri = '/app/generator/new_generator1/'
-    dataset = pd.read_csv(stri + 'dataset.csv')
+    path_f = Path(__file__).parent / 'new_generator1'
+    #stri = '/app/generator/new_generator1/'
+    dataset = pd.read_csv(path_f + 'dataset.csv')
     dataset['id'] = dataset['id'].astype(int)
     names = pd.read_csv(stri + 'names.csv')
 
