@@ -140,7 +140,9 @@ def main():
             col2.text(' ')
             col2.text(' ')
 
-            col3.markdown(f"**User interests:** {' '.join(idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values)}")
+            col3.markdown(f"**User interests:** ")
+            for k in idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values:
+                col3.markdown(k)
             col3.text(' ')
             col3.text(' ')
 
