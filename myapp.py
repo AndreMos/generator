@@ -106,24 +106,22 @@ def main():
         #sample
 
         if slider == 'not specified' and  gen == 'not specified':
-            #bn = sample(final_bn)
-            bn = pd.read_csv('data/sample_real.csv')
+            bn = sample(final_bn)
         elif age == 'not specified':
             bn = sample(final_bn, gender = gen)
         elif gen == 'not specified':
             bn = sample(final_bn, age = age)
         else:
             bn = sample(final_bn, age = age, gender = gen)
-        #res = sam(bn)
-        bn['has_high_education'] = bn['has_high_education'].astype(int).astype(str)
-        bn['relation'] = bn['relation'].astype(int).astype(str)
-        bn['sex'] = bn['sex'].astype(int).astype(str)
-        res = bn
-        #res1 = res
+        res = sam(bn)
+        # bn['has_high_education'] = bn['has_high_education'].astype(int).astype(str)
+        # bn['relation'] = bn['relation'].astype(int).astype(str)
+        # bn['sex'] = bn['sex'].astype(int).astype(str)
+        res1 = res
         #res.dtypes
         #bn.T.iloc[:,4:-1]
 
-        for rec in np.array_split(res,bn.shape[0]):
+        for rec in np.array_split(res,res.shape[0]):
             col1, col2, col3 = reg_columns()
             name = rec['names'].iloc[0]
             educ = dicti_educ[rec['has_high_education'].iloc[0]]
@@ -174,7 +172,7 @@ def main():
             col1.image(avatar, caption = 'Profile picture')
             col1.text(' ')
             os.chdir('/app/generator/')
-        col1.markdown(get_table_download_link(bn), unsafe_allow_html=True)
+        st.markdown(get_table_download_link(bn), unsafe_allow_html=True)
             #res1
         # #age = slider.lower()
         # gender = gen.lower()
