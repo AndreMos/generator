@@ -83,7 +83,7 @@ def main():
     }
     dicti_educ = {'0' : 'No', '1' : 'Yes'}
     dicti_gen = {'1' : 'female', '2' : 'male'}
-    dataset, names, final_bn, idx_to_interest = load()
+    dataset, names, w_names, final_bn, idx_to_interest = load()
 
     #df = sample(final_bn)
     #df
@@ -106,19 +106,19 @@ def main():
         #sample
 
         if slider == 'not specified' and  gen == 'not specified':
-            bn = sample(final_bn)
+            bn = sample(final_bn, None, None, names, white_names = w_names)
         elif age == 'not specified':
-            bn = sample(final_bn, gender = gen)
+            bn = sample(final_bn, gender = gen, names = names, white_names = w_names)
         elif gen == 'not specified':
-            bn = sample(final_bn, age = age)
+            bn = sample(final_bn, age = age, names = names, white_names = w_names)
         else:
-            bn = sample(final_bn, age = age, gender = gen)
+            bn = sample(final_bn, age = age, gender = gen, names = names, white_names = w_names )
         res = sam(bn)
         # bn['has_high_education'] = bn['has_high_education'].astype(int).astype(str)
         # bn['relation'] = bn['relation'].astype(int).astype(str)
         # bn['sex'] = bn['sex'].astype(int).astype(str)
         res1 = res
-        logging.info("Synt shape: ", res.shape)
+        logging.info("Synt shape: " + str(res.shape))
         #res.dtypes
         #bn.T.iloc[:,4:-1]
 
@@ -232,6 +232,9 @@ def load():
     params = read_params('K2_bn_param')
     final_bn = HyBayesianNetwork(skel, params)
     idx_to_interest = pd.read_csv('key_words_groups_interests.csv')
+
+    # names = pd.read_csv('data/names.csv')
+    white_names = pd.read_csv('data/white_names.csv')
     logging.info('BN downloaded')
     url = 'https://drive.google.com/uc?id=1NQIXdma7J0HJ6WfU0Z7VUcF_ypoJ9UrN'
     output = 'modulus.zip'
@@ -245,7 +248,7 @@ def load():
     dataset['id'] = dataset['id'].astype(int)
     names = pd.read_csv(stri + 'names.csv')
 
-    return dataset, names, final_bn, idx_to_interest
+    return dataset, names, white_names, final_bn, idx_to_interest
 
     #return Gs
 
