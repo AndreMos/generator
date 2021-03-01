@@ -92,7 +92,8 @@ def main():
         #sample
 
         if slider == 'not specified' and  gen == 'not specified':
-            bn = sample(final_bn)
+            #bn = sample(final_bn)
+            bn = pd.read_csv('data/sample_real.csv')
         elif age == 'not specified':
             bn = sample(final_bn, gender = gen)
         elif gen == 'not specified':
