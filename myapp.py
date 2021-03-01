@@ -145,7 +145,7 @@ def main():
             os.chdir('/app/generator/new_generator1')
             res = ovr['id'].iloc[0]
             path_img = Path(__file__).parent / 'new_generator1'
-            avatar = Image.open(path_img / race + '/' + str(res) + '.jpg')
+            avatar = Image.open(path_img / race  /  (str(res) + '.jpg'))
             col1.image(avatar, caption = 'Profile picture')
             col1.text(' ')
             os.chdir('/app/generator/')
