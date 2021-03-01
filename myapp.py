@@ -111,11 +111,15 @@ def main():
             bn = sample(final_bn, age = age)
         else:
             bn = sample(final_bn, age = age, gender = gen)
-        res = sam(bn)
-        res1 = res
-        res
+        #res = sam(bn)
+        bn['has_high_education'] = bn['has_high_education'].astype(str)
+        bn['relation'] = bn['relation'].astype(str)
+        bn['sex'] = bn['sex'].astype(str)
+        res = bn
+        #res1 = res
+        #res.dtypes
         #bn.T.iloc[:,4:-1]
-        for rec in np.array_split(res,3):
+        for rec in np.array_split(res,9):
             name = rec['names'].iloc[0]
             educ = dicti_educ[rec['has_high_education'].iloc[0]]
             fam = dicti_fam[rec['relation'].iloc[0]]
