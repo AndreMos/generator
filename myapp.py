@@ -27,8 +27,15 @@ def fold(age):
         return 'adult'
     else:
         return 'old'
-    # else:
-    # return 3
+
+def sam(bn):
+    bn = bn.copy()
+    h1 = bn[bn['has_high_education'] == 1].sample(1)
+    bn.drop(h1.index.values, axis = 0, inplace = True)
+    h2 = bn[bn['relation'] != 0].sample(1)
+    bn.drop(h2.index.values, axis = 0, inplace = True)
+    h3 = bn.sample(1)
+    return pd.concat([h1, h2, h3], axis = 0)
 
 def main():
     # story ='Я люблю тебя'
@@ -79,7 +86,7 @@ def main():
             bn = sample(final_bn, age = age)
         else:
             bn = sample(final_bn, age = age, gender = gen)
-        res = bn.sample(3)
+        res = sam(bn)
         res1 = res
         #bn.T.iloc[:,4:-1]
         for rec in np.array_split(res,3):
