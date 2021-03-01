@@ -61,6 +61,9 @@ def get_table_download_link(df):
     href = f'<a href="data:file/csv;base64,{b64}" download="synthetic_data.csv">Download generated synthetic dataset</a>'
     return href
 
+def reg_columns():
+    return st.beta_columns(3)
+
 def main():
     # story ='Я люблю тебя'
     # bert, classif,tokenizer = load_components()
@@ -84,7 +87,7 @@ def main():
 
     #df = sample(final_bn)
     #df
-    col1, col2, col3 = st.beta_columns(3)
+    #col1, col2, col3 = st.beta_columns(3)
     #col1.title('Avatar here')
     #story = col2.text_area('Insert news')
     #col2.title('Meta-info here')#
@@ -119,7 +122,9 @@ def main():
         #res1 = res
         #res.dtypes
         #bn.T.iloc[:,4:-1]
+
         for rec in np.array_split(res,bn.shape[0]):
+            col1, col2, col3 = reg_columns()
             name = rec['names'].iloc[0]
             educ = dicti_educ[rec['has_high_education'].iloc[0]]
             fam = dicti_fam[rec['relation'].iloc[0]]
