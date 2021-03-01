@@ -5,7 +5,7 @@ import math
 import random
 
 
-def sample(bn: HyBayesianNetwork, age: str = None, gender: str = None, names: pd.DataFrame = None, white_names: DataFrame = None ) -> pd.DataFrame:
+def sample(bn: HyBayesianNetwork, age: str = None, gender: str = None, names: pd.DataFrame = None, white_names: pd.DataFrame = None ) -> pd.DataFrame:
     dataset = pd.DataFrame()
     age_values = []
     gender_value = 0
