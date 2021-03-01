@@ -30,12 +30,25 @@ def fold(age):
 
 def sam(bn):
     bn = bn.copy()
-    h1 = bn[bn['has_high_education'] == 1].sample(1)
-    bn.drop(h1.index.values, axis = 0, inplace = True)
-    h2 = bn[bn['relation'] != 0].sample(1)
-    bn.drop(h2.index.values, axis = 0, inplace = True)
-    h3 = bn.sample(1)
-    return pd.concat([h1, h2, h3], axis = 0)
+    counter = 3
+    logging.info(bn.shape)
+    arr = []
+    if bn[bn['has_high_education'] == 1].shape[0] != 0:
+        h1 = bn[bn['has_high_education'] == 1].sample(1)
+        bn.drop(h1.index.values, axis = 0, inplace = True)
+        arr.append(h1)
+    else:
+        counter -= 1
+
+    if bn[bn['relation'] != 0].shape[0] != 0:
+        h2 = bn[bn['relation'] != 0].sample(1)
+        bn.drop(h2.index.values, axis = 0, inplace = True)
+        arr.append(h2)
+    else:
+        counter -= 1
+    h3 = bn.sample(counter)
+    arr.append(h3)
+    return pd.concat(arr, axis = 0)
 
 def main():
     # story ='Я люблю тебя'
