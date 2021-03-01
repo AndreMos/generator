@@ -172,7 +172,7 @@ def load():
     #stri = '/app/generator/new_generator1/'
     dataset = pd.read_csv(path_f / 'dataset.csv')
     dataset['id'] = dataset['id'].astype(int)
-    names = pd.read_csv(stri + 'names.csv')
+    names = pd.read_csv(path_f / 'names.csv')
 
     return dataset, names, white_names, final_bn, idx_to_interest
 
