@@ -170,7 +170,7 @@ def load():
 
     path_f = Path(__file__).parent / 'new_generator1'
     #stri = '/app/generator/new_generator1/'
-    dataset = pd.read_csv(path_f + 'dataset.csv')
+    dataset = pd.read_csv(path_f / 'dataset.csv')
     dataset['id'] = dataset['id'].astype(int)
     names = pd.read_csv(stri + 'names.csv')
 
