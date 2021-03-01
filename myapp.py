@@ -119,7 +119,7 @@ def main():
         #res1 = res
         #res.dtypes
         #bn.T.iloc[:,4:-1]
-        for rec in np.array_split(res,9):
+        for rec in np.array_split(res,bn.shape[0]):
             name = rec['names'].iloc[0]
             educ = dicti_educ[rec['has_high_education'].iloc[0]]
             fam = dicti_fam[rec['relation'].iloc[0]]
