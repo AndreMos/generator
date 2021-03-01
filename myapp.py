@@ -113,6 +113,7 @@ def main():
             bn = sample(final_bn, age = age, gender = gen)
         res = sam(bn)
         res1 = res
+        res
         #bn.T.iloc[:,4:-1]
         for rec in np.array_split(res,3):
             name = rec['names'].iloc[0]
