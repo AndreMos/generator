@@ -162,7 +162,7 @@ def main():
             col1.image(avatar, caption = 'Profile picture')
             col1.text(' ')
             os.chdir('/app/generator/')
-        st.markdown(get_table_download_link(bn), unsafe_allow_html=True)
+        col1.markdown(get_table_download_link(bn), unsafe_allow_html=True)
             #res1
         # #age = slider.lower()
         # gender = gen.lower()
