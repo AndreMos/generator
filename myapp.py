@@ -10,7 +10,7 @@ import gdown
 import os
 import sys
 import argparse
-
+from pathlib import Path
 import zipfile
 import logging
 os.chdir('/app/generator/')
