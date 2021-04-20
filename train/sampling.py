@@ -5,48 +5,28 @@ import math
 import random
 
 
-def sample(bn: HyBayesianNetwork, age: str = None, gender: str = None, names: pd.DataFrame = None, white_names: pd.DataFrame = None ) -> pd.DataFrame:
+def sample(bn: HyBayesianNetwork, age: str = None, gender: str = None) -> pd.DataFrame:
     dataset = pd.DataFrame()
     age_values = []
     gender_value = 0
-    # names = pd.read_csv('data/names.csv')
-    # white_names = pd.read_csv('data/white_names.csv')
-    white_names.iloc[:,1] = white_names.iloc[:,1].astype('int')
+    names = pd.read_csv('data/final_names.csv')
     if (age == None) & (gender == None):
         dataset = generate_synthetics(bn)
-        if (dataset.shape[0] % 2 == 0):
-            names = names['name'].tolist()
-            names1 = random.sample(names, int(dataset.shape[0]/2))
-            names2 = []
-            for i in range(int(dataset.shape[0]/2),dataset.shape[0]):
-                if dataset.loc[i,'sex'] == '1':
-                    female_names = white_names.loc[white_names['sex'] == 1]
-                    names2.append(random.choice(female_names['first_name'].tolist()))
-                else:
-                    male_names = white_names.loc[white_names['sex'] == 2]
-                    names2.append(random.choice(male_names['first_name'].tolist()))
-            names = names1+names2
-            dataset['names'] = names
-        else:
-            names = names['name'].tolist()
-            names1 = random.sample(names, dataset.shape[0]//2)
-            names2 = []
-            for i in range(dataset.shape[0]//2,dataset.shape[0]):
-                if dataset.loc[i,'sex'] == '1':
-                    female_names = white_names.loc[white_names['sex'] == 1]
-                    names2.append(random.choice(female_names['first_name'].tolist()))
-                else:
-                    male_names = white_names.loc[white_names['sex'] == 2]
-                    names2.append(random.choice(male_names['first_name'].tolist()))
-            names = names1+names2
-            dataset['names'] = names
-
+        names_all = []
+        for i in range(dataset.shape[0]):
+            if dataset.loc[i,'sex'] == '1':
+                female_names = names.loc[names['Gender'] == 1]
+                names_all.append(random.choice(female_names['Name'].tolist()))
+            else:
+                male_names = names.loc[names['Gender'] == 2]
+                names_all.append(random.choice(male_names['Name'].tolist()))
+        dataset['names'] = names_all
+        
     else:
         if age != None:
             if age == 'teen':
                 age_values = [15,16,17,18,19,20]
             if age == 'adult':
-
                 age_values = [21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45]
             if age == 'old':
                 age_values = [46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90]
@@ -73,37 +53,26 @@ def sample(bn: HyBayesianNetwork, age: str = None, gender: str = None, names: pd
             df3 = generate_synthetics(bn, 200, evidence={'sex': str(gender_value)})
             dataset = pd.concat([df1, df2, df3])
             dataset.reset_index(inplace=True, drop=True)
+    
 
-        if (dataset.shape[0] % 2 == 0):
-            names = names['name'].tolist()
-            names1 = random.sample(names, int(dataset.shape[0]/2))
-            names2 = []
-            for i in range(int(dataset.shape[0]/2),dataset.shape[0]):
-                if dataset.loc[i,'sex'] == '1':
-                    female_names = white_names.loc[white_names['sex'] == 1]
-                    names2.append(random.choice(female_names['first_name'].tolist()))
-                else:
-                    male_names = white_names.loc[white_names['sex'] == 2]
-                    names2.append(random.choice(male_names['first_name'].tolist()))
-            names = names1+names2
-            dataset['names'] = names
-        else:
-            names = names['name'].tolist()
-            names1 = random.sample(names, dataset.shape[0]//2)
-            names2 = []
-            for i in range(dataset.shape[0]//2,dataset.shape[0]):
-                if dataset.loc[i,'sex'] == '1':
-                    female_names = white_names.loc[white_names['sex'] == 1]
-                    names2.append(random.choice(female_names['first_name'].tolist()))
-                else:
-                    male_names = white_names.loc[white_names['sex'] == 2]
-                    names2.append(random.choice(male_names['first_name'].tolist()))
-            names = names1+names2
-            dataset['names'] = names
+        names_all = []
+        for i in range(dataset.shape[0]):
+            if dataset.loc[i,'sex'] == '1':
+                female_names = names.loc[names['Gender'] == 1]
+                names_all.append(random.choice(female_names['Name'].tolist()))
+            else:
+                male_names = names.loc[names['Gender'] == 2]
+                names_all.append(random.choice(male_names['Name'].tolist()))
+        dataset['names'] = names_all
 
 
     return dataset
 
+        
+
+        
+
+    
 
 
 
@@ -122,12 +91,7 @@ def sample(bn: HyBayesianNetwork, age: str = None, gender: str = None, names: pd
 
 
 
-
-
-
-
-
-def generate_synthetics(bn: HyBayesianNetwork, n: int = 1000, evidence: dict = None) -> pd.DataFrame:
+def generate_synthetics(bn: HyBayesianNetwork, n: int = 10000, evidence: dict = None) -> pd.DataFrame:
     """Function for sampling from BN
 
     Args:
@@ -160,7 +124,7 @@ def generate_synthetics(bn: HyBayesianNetwork, n: int = 1000, evidence: dict = N
         sample.reset_index(inplace=True, drop=True)
 
 
-
+    
 
     # final_sample = pd.DataFrame()
 
@@ -214,3 +178,8 @@ def get_probability(sample: pd.DataFrame, initial_data: pd.DataFrame, parameter:
             dict_prob[i].append(0)
 
     return dict_prob
+
+
+
+    
+
