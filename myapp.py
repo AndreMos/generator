@@ -151,6 +151,7 @@ def main():
             col1.image(avatar, caption = 'Profile picture')
             col1.text(' ')
             os.chdir('/app/generator/')
+            rec
             #bn
             #res1
         # #age = slider.lower()
