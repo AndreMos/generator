@@ -127,6 +127,8 @@ def main():
             col3.markdown(f"**User interests:** {' '.join(inter)}")#idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values)}")
             col3.text(' ')
             col3.text(' ')
+            col3.text(' ')
+            col3.text(' ')
 
             os.chdir('/app/generator/new_generator1')
             h = names[names['Name'].str.find(name)!=-1]['Ethnicity']
