@@ -111,7 +111,7 @@ def main():
             gender = dicti_gen[rec['sex'].iloc[0]]
 
             #inter
-            inter = inter.sort_values( ascending = False)[:4]
+            #inter = inter.sort_values( ascending = False)[:4]
             age1 = rec['age'].iloc[0]
             #aage
             col2.markdown(f'**Name** : {name}')
@@ -124,7 +124,7 @@ def main():
             col2.text(' ')
             col2.text(' ')
 
-            col3.markdown(f"**User interests:** {' '.join(inter.values)}")#idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values)}")
+            col3.markdown(f"**User interests:** {' '.join(inter)}")#idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values)}")
             col3.text(' ')
             col3.text(' ')
 
