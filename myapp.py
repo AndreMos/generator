@@ -124,7 +124,7 @@ def main():
             col2.text(' ')
             col2.text(' ')
 
-            col3.markdown(f"**User interests:** {' '.join(inter.values)}"#idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values)}")
+            col3.markdown(f"**User interests:** {' '.join(inter.values)}")#idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values)}")
             col3.text(' ')
             col3.text(' ')
 
