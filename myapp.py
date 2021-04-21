@@ -129,6 +129,9 @@ def main():
             col3.text(' ')
             col3.text(' ')
             col3.text(' ')
+            col3.text(' ')
+            col3.text(' ')
+
 
             os.chdir('/app/generator/new_generator1')
             h = names[names['Name'].str.find(name)!=-1]['Ethnicity']
