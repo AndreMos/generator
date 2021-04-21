@@ -130,7 +130,7 @@ def main():
             col3.text(' ')
             col3.text(' ')
             col3.text(' ')
-            col3.text(' ')
+            
 
 
             os.chdir('/app/generator/new_generator1')
