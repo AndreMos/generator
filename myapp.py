@@ -156,6 +156,7 @@ def main():
             col1.image(avatar, caption = 'Profile picture')
             col1.image(avatar, caption='Profile picture', width = 100)
             col1.text(' ')
+            st.text('TEST: ')
             os.chdir('/app/generator/')
             #rec
             #bn
