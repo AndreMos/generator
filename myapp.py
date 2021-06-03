@@ -73,7 +73,7 @@ def main():
 
     #df = sample(final_bn)
     #df
-    col1, col2, col3 = st.beta_columns(3)
+    #col1, col2, col3 = st.beta_columns(3)
     #col1.title('Avatar here')
     #story = col2.text_area('Insert news')
     #col2.title('Meta-info here')#
@@ -104,6 +104,7 @@ def main():
         res1 = res
         #bn.T.iloc[:,4:-1]
         for rec in np.array_split(res,3):
+            col1, col2, col3 = st.beta_columns(3)
             name = rec['names'].iloc[0]
             educ = dicti_educ[rec['has_high_education'].iloc[0]]
             fam = dicti_fam[rec['relation'].iloc[0]]
