@@ -154,6 +154,7 @@ def main():
             res = ovr['id'].iloc[0]
             avatar = Image.open(race + '/' + str(res) + '.jpg')
             col1.image(avatar, caption = 'Profile picture')
+            col1.image(avatar, caption='Profile picture', width = 100)
             col1.text(' ')
             os.chdir('/app/generator/')
             #rec
