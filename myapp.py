@@ -158,8 +158,8 @@ def main():
             col1.image(avatar, caption = 'Profile picture')
             for inter_sample in inter:
                 t = int_names[int_names['int'] == inter_sample]
-                inter_sample
-                pd.unique(int_names['int'])
+                logging.info(inter_sample)
+                logging.info(pd.unique(int_names['int']))
                 t
                 try:
                     pict = t['ref'].iloc[0]
