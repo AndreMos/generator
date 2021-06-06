@@ -237,7 +237,7 @@ def load():
         zip_ref.extractall('inter_images')
     int_names = pd.DataFrame(columns = ['int','ref'])
     for file in os.listdir('inter_images'):
-        int_names = int_names.append({'int' : file.split('_')[0], 'ref' : file})#int(file.split('_')[1][:-4])})
+        int_names = int_names.append({'int' : file.split('_')[0], 'ref' : file}, ignore_index=True)#int(file.split('_')[1][:-4])})
     with zipfile.ZipFile('modulus.zip', 'r') as zip_ref:
         zip_ref.extractall()
 
