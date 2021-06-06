@@ -111,8 +111,8 @@ def main():
             inter = rec.iloc[0,5:-1].sort_values( ascending = False)[:3].index.values
             gender = dicti_gen[rec['sex'].iloc[0]]
 
-            inter
-            int_names
+            #inter
+            #int_names
             #inter = inter.sort_values( ascending = False)[:4]
             age1 = rec['age'].iloc[0]
             #aage
@@ -158,6 +158,7 @@ def main():
             col1.image(avatar, caption = 'Profile picture')
             for inter_sample in inter:
                 t = int_names[int_names['int'] == inter_sample]
+                t
                 try:
                     pict = t['ref'].iloc[0]
                     img = Image.open('inter_images' + '/' + pict )
