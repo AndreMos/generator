@@ -69,7 +69,7 @@ def main():
     }
     dicti_educ = {'0' : 'No', '1' : 'Yes'}
     dicti_gen = {'1' : 'female', '2' : 'male'}
-    dataset, names, final_bn, idx_to_interest = load()
+    dataset, names, final_bn, idx_to_interest, int_names = load()
 
     #df = sample(final_bn)
     #df
@@ -108,7 +108,7 @@ def main():
             name = rec['names'].iloc[0]
             educ = dicti_educ[rec['has_high_education'].iloc[0]]
             fam = dicti_fam[rec['relation'].iloc[0]]
-            inter = rec.iloc[0,5:-1].sort_values( ascending = False)[:4].index.values
+            inter = rec.iloc[0,5:-1].sort_values( ascending = False)[:3].index.values
             gender = dicti_gen[rec['sex'].iloc[0]]
 
             #inter
@@ -155,7 +155,12 @@ def main():
             res = ovr['id'].iloc[0]
             avatar = Image.open(race + '/' + str(res) + '.jpg')
             col1.image(avatar, caption = 'Profile picture')
-            col1.image(avatar, caption='Profile picture', width = 100)
+            for inter_sample in inter:
+                t = int_names[int_names['int'] == inter_sample]
+                pict = t['ref'].iloc[0]
+                img = Image.open('inter_images' + '/' + pict )
+                col1.image(img, caption='Content picture', width = 100)
+            #col1.image(avatar, caption='Profile picture')
             col1.text(' ')
             st.text('TEST: ')
             os.chdir('/app/generator/')
@@ -225,6 +230,14 @@ def load():
     output = 'modulus.zip'
     logging.info('Start load')
     gdown.download(url, output, quiet=False)
+    url = 'https://drive.google.com/uc?id=1d1j9McVxzGp9jnkz_Q-cV_u10NqSPbS0'
+    output = 'interest.zip'
+    gdown.download(url, output, quiet=False)
+    with zipfile.ZipFile('interest.zip', 'r') as zip_ref:
+        zip_ref.extractall('inter_images')
+    int_names = pd.DataFrame(columns = ['int','ref'])
+    for file in os.listdir('inter_images'):
+        int_names = int_names.append({'int' : file.split('_')[0], 'ref' : file})#int(file.split('_')[1][:-4])})
     with zipfile.ZipFile('modulus.zip', 'r') as zip_ref:
         zip_ref.extractall()
 
@@ -234,7 +247,7 @@ def load():
     #names = pd.read_csv(stri + 'names.csv')
     names = pd.read_csv(path / 'data/final_names.csv')
 
-    return dataset, names, final_bn, idx_to_interest
+    return dataset, names, final_bn, idx_to_interest, int_names
 
     #return Gs
 
