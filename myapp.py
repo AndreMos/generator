@@ -158,10 +158,10 @@ def main():
             col1.image(avatar, caption = 'Profile picture')
             for inter_sample in inter:
                 t = int_names[int_names['int'].apply(lambda x: x[:5]) == inter_sample.replace(',','')[:5]]
-                t
-                logging.info([inter_sample.replace(',','')])
-                logging.info(pd.unique(int_names['int']))
-                logging.info(inter_sample in pd.unique(int_names['int']))
+                # t
+                # logging.info([inter_sample.replace(',','')])
+                # logging.info(pd.unique(int_names['int']))
+                # logging.info(inter_sample in pd.unique(int_names['int']))
                 try:
                     pict = t['ref'].iloc[0]
                     img = Image.open('inter_images' + '/' + pict )
