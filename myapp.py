@@ -157,10 +157,7 @@ def main():
             avatar = Image.open(race + '/' + str(res) + '.jpg')
             col1.image(avatar, caption = 'Profile picture')
             for inter_sample in inter:
-                t = int_names[int_names['int'] == inter_sample]
-                logging.info(inter_sample)
-                logging.info(pd.unique(int_names['int']))
-                t
+                t = int_names[int_names['int'] == inter_sample.replace(',','')]
                 try:
                     pict = t['ref'].iloc[0]
                     img = Image.open('inter_images' + '/' + pict )
