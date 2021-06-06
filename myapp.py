@@ -157,7 +157,7 @@ def main():
             avatar = Image.open(race + '/' + str(res) + '.jpg')
             col1.image(avatar, caption = 'Profile picture')
             for inter_sample in inter:
-                t = int_names[int_names['int'] == inter_sample.replace(',','')]
+                t = int_names[int_names['int'].apply(lambda x: x[:5]) == inter_sample.replace(',','')[:5]]
                 t
                 logging.info([inter_sample.replace(',','')])
                 logging.info(pd.unique(int_names['int']))
