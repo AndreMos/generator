@@ -111,7 +111,7 @@ def main():
             inter = rec.iloc[0,5:-1].sort_values( ascending = False)[:3].index.values
             gender = dicti_gen[rec['sex'].iloc[0]]
 
-            #inter
+            inter
             #inter = inter.sort_values( ascending = False)[:4]
             age1 = rec['age'].iloc[0]
             #aage
@@ -157,9 +157,12 @@ def main():
             col1.image(avatar, caption = 'Profile picture')
             for inter_sample in inter:
                 t = int_names[int_names['int'] == inter_sample]
-                pict = t['ref'].iloc[0]
-                img = Image.open('inter_images' + '/' + pict )
-                col1.image(img, caption='Content picture', width = 100)
+                try:
+                    pict = t['ref'].iloc[0]
+                    img = Image.open('inter_images' + '/' + pict )
+                    col1.image(img, caption='Content picture', width = 100)
+                except:
+                    continue
             #col1.image(avatar, caption='Profile picture')
             col1.text(' ')
             st.text('TEST: ')
