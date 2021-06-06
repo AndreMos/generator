@@ -112,7 +112,7 @@ def main():
             gender = dicti_gen[rec['sex'].iloc[0]]
 
             inter
-            int_names.head()
+            int_names
             #inter = inter.sort_values( ascending = False)[:4]
             age1 = rec['age'].iloc[0]
             #aage
