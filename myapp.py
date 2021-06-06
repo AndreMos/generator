@@ -159,6 +159,9 @@ def main():
             for inter_sample in inter:
                 t = int_names[int_names['int'] == inter_sample.replace(',','')]
                 t
+                logging.info([inter_sample.replace(',','')])
+                logging.info(pd.unique(int_names['int']))
+                logging.info(inter_sample in pd.unique(int_names['int']))
                 try:
                     pict = t['ref'].iloc[0]
                     img = Image.open('inter_images' + '/' + pict )
