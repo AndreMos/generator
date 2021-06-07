@@ -165,8 +165,9 @@ def main():
                 # logging.info(pd.unique(int_names['int']))
                 # logging.info(inter_sample in pd.unique(int_names['int']))
                 if t.shape[0] == 0:
-                    continue
-                pict = t['ref'].iloc[0]
+                    pict = int_names.sample(1)['ref'].iloc[0]
+                else:
+                    pict = t['ref'].iloc[0]
 
                 img = Image.open('inter_images' + '/' + pict )
                 col_i.image(img, caption='Content picture')
