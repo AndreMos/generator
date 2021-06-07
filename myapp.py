@@ -121,17 +121,10 @@ def main():
             col2.markdown(f'**Gender: ** {gender}')
             col2.markdown(f'**High education:** {educ}')
             col2.markdown(f'**Family status: ** {fam}')
-            col2.text(' ')
-            col2.text(' ')
-            col2.text(' ')
-            col2.text(' ')
+
 
             col3.markdown(f"**User interests:** {' '.join(inter)}")#idx_to_interest[idx_to_interest['topic'].isin(inter)]['key_words'].values)}")
-            col3.text(' ')
-            col3.text(' ')
-            col3.text(' ')
-            col3.text(' ')
-            col3.text(' ')
+
             
 
 
@@ -173,8 +166,7 @@ def main():
                 col_i.image(img, caption='Content picture')
 
             #col1.image(avatar, caption='Profile picture')
-            col1.text(' ')
-            st.text('TEST: ')
+
             os.chdir('/app/generator/')
             #rec
             #bn
