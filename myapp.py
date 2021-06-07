@@ -156,18 +156,19 @@ def main():
             res = ovr['id'].iloc[0]
             avatar = Image.open(race + '/' + str(res) + '.jpg')
             col1.image(avatar, caption = 'Profile picture')
+            os.chdir('/app/generator/')
             for inter_sample in inter:
                 t = int_names[int_names['int'].apply(lambda x: x[:5]) == inter_sample.replace(',','')[:5]]
                 # t
                 # logging.info([inter_sample.replace(',','')])
                 # logging.info(pd.unique(int_names['int']))
                 # logging.info(inter_sample in pd.unique(int_names['int']))
-                try:
-                    pict = t['ref'].iloc[0]
-                    img = Image.open('inter_images' + '/' + pict )
-                    col1.image(img, caption='Content picture', width = 100)
-                except:
-                    continue
+
+                pict = t['ref'].iloc[0]
+
+                img = Image.open('inter_images' + '/' + pict )
+                col1.image(img, caption='Content picture', width = 100)
+
             #col1.image(avatar, caption='Profile picture')
             col1.text(' ')
             st.text('TEST: ')
