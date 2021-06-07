@@ -157,17 +157,19 @@ def main():
             avatar = Image.open(race + '/' + str(res) + '.jpg')
             col1.image(avatar, caption = 'Profile picture')
             os.chdir('/app/generator/')
-            for inter_sample in inter:
+            col_int  = st.beta_columns(5)
+            for inter_sample, col_i in zip(inter,col_int):
                 t = int_names[int_names['int'].apply(lambda x: x[:5]) == inter_sample.replace(',','')[:5]]
                 # t
                 # logging.info([inter_sample.replace(',','')])
                 # logging.info(pd.unique(int_names['int']))
                 # logging.info(inter_sample in pd.unique(int_names['int']))
-
+                if t.shape[0] == 0:
+                    continue
                 pict = t['ref'].iloc[0]
 
                 img = Image.open('inter_images' + '/' + pict )
-                col1.image(img, caption='Content picture', width = 100)
+                col_i.image(img, caption='Content picture')
 
             #col1.image(avatar, caption='Profile picture')
             col1.text(' ')
