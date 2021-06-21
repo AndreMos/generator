@@ -108,7 +108,7 @@ def main():
             name = rec['names'].iloc[0]
             educ = dicti_educ[rec['has_high_education'].iloc[0]]
             fam = dicti_fam[rec['relation'].iloc[0]]
-            inter = rec.iloc[0,5:-1].sort_values( ascending = False)[:3].index.values
+            inter = [res['top_interest1'], res['top_interest2'], res['top_interest3']]#rec.iloc[0,5:-1].sort_values( ascending = False)[:3].index.values
             gender = dicti_gen[rec['sex'].iloc[0]]
 
             #inter
@@ -117,7 +117,7 @@ def main():
             age1 = rec['age'].iloc[0]
             #aage
             col2.markdown(f'**Name** : {name}')
-            col2.markdown(f'**Age: ** {round(age1)}')
+            col2.markdown(f'**Age: ** {str(int(age1))}')
             col2.markdown(f'**Gender: ** {gender}')
             col2.markdown(f'**High education:** {educ}')
             col2.markdown(f'**Family status: ** {fam}')
