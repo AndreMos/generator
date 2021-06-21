@@ -117,7 +117,7 @@ def main():
             age1 = rec['age'].iloc[0]
             #aage
             col2.markdown(f'**Name** : {name}')
-            col2.markdown(f'**Age: ** {age1}')
+            col2.markdown(f'**Age: ** {round(age1)}')
             col2.markdown(f'**Gender: ** {gender}')
             col2.markdown(f'**High education:** {educ}')
             col2.markdown(f'**Family status: ** {fam}')
