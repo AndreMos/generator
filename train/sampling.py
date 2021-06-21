@@ -110,12 +110,12 @@ def generate_synthetics(bn: HyBayesianNetwork, n: int = 100, evidence: dict = No
     if evidence:
         sample = pd.DataFrame(bn.randomsample(10 * n, evidence=evidence))
         sample.dropna(inplace=True)
-        sample = sample.loc[(sample.loc[:, ['age']].values >= 0).all(axis=1)]
+        sample = sample.loc[(sample.loc[:, ['age']].astype(int).values >= 0).all(axis=1)]
         sample.reset_index(inplace=True, drop=True)
     else:
         sample = pd.DataFrame(bn.randomsample(10 * n))
         sample.dropna(inplace=True)
-        sample = sample.loc[(sample.loc[:, ['age']].values >= 0).all(axis=1)]
+        sample = sample.loc[(sample.loc[:, ['age']].astype(int).values >= 0).all(axis=1)]
         sample.reset_index(inplace=True, drop=True)
 
 
