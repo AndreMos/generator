@@ -110,7 +110,7 @@ def main():
             fam = dicti_fam[rec['relation'].iloc[0]]
             inter = [res['top_interest1'], res['top_interest2'], res['top_interest3']]#rec.iloc[0,5:-1].sort_values( ascending = False)[:3].index.values
             gender = dicti_gen[rec['sex'].iloc[0]]
-            rec
+            print(rec)
             #inter
             #int_names
             #inter = inter.sort_values( ascending = False)[:4]
