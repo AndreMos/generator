@@ -107,9 +107,9 @@ def main():
             col1, col2, col3 = st.beta_columns(3)
             name = rec['names'].iloc[0]
             educ = dicti_educ[rec['has_high_education'].iloc[0]]
-            rec
+            #rec
             fam = dicti_fam[rec['relation'].iloc[0]]
-            inter = [res['top_interest1'], res['top_interest2'], res['top_interest3']]#rec.iloc[0,5:-1].sort_values( ascending = False)[:3].index.values
+            inter = rec.iloc[0,5:-1].sort_values( ascending = False)[:3].index.values
             gender = dicti_gen[rec['sex'].iloc[0]]
 
             #inter
