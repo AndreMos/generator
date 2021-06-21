@@ -26,25 +26,28 @@ def sample(bn: HyBayesianNetwork, age: str = None, gender: str = None) -> pd.Dat
         if age != None:
             if age == 'teen':
                 age_values = [15,16,17,18,19,20]
+                age_values = [float(a) for a in age_values]
             if age == 'adult':
                 age_values = [21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45]
+                age_values = [float(a) for a in age_values]
             if age == 'old':
                 age_values = [46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90]
+                age_values = [float(a) for a in age_values]
         if gender != None:
             if gender == 'Male':
                 gender_value = 2
             else:
                 gender_value = 1
         if (age != None) & (gender != None):
-            df1 = generate_synthetics(bn, 200, evidence={'age': str(random.choice(age_values)), 'sex': str(gender_value)})
-            df2 = generate_synthetics(bn, 200, evidence={'age': str(random.choice(age_values)), 'sex': str(gender_value)})
-            df3 = generate_synthetics(bn, 200, evidence={'age': str(random.choice(age_values)), 'sex': str(gender_value)})
+            df1 = generate_synthetics(bn, 200, evidence={'age': random.choice(age_values), 'sex': str(gender_value)})
+            df2 = generate_synthetics(bn, 200, evidence={'age': random.choice(age_values), 'sex': str(gender_value)})
+            df3 = generate_synthetics(bn, 200, evidence={'age': random.choice(age_values), 'sex': str(gender_value)})
             dataset = pd.concat([df1, df2, df3])
             dataset.reset_index(inplace=True, drop=True)
         if (age != None) & (gender == None):
-            df1 = generate_synthetics(bn, 200, evidence={'age': str(random.choice(age_values))})
-            df2 = generate_synthetics(bn, 200, evidence={'age': str(random.choice(age_values))})
-            df3 = generate_synthetics(bn, 200, evidence={'age': str(random.choice(age_values))})
+            df1 = generate_synthetics(bn, 200, evidence={'age': random.choice(age_values)})
+            df2 = generate_synthetics(bn, 200, evidence={'age': random.choice(age_values)})
+            df3 = generate_synthetics(bn, 200, evidence={'age': random.choice(age_values)})
             dataset = pd.concat([df1, df2, df3])
             dataset.reset_index(inplace=True, drop=True)
         if (age == None) & (gender != None):
@@ -91,7 +94,7 @@ def sample(bn: HyBayesianNetwork, age: str = None, gender: str = None) -> pd.Dat
 
 
 
-def generate_synthetics(bn: HyBayesianNetwork, n: int = 10000, evidence: dict = None) -> pd.DataFrame:
+def generate_synthetics(bn: HyBayesianNetwork, n: int = 100, evidence: dict = None) -> pd.DataFrame:
     """Function for sampling from BN
 
     Args:
@@ -106,21 +109,13 @@ def generate_synthetics(bn: HyBayesianNetwork, n: int = 10000, evidence: dict = 
 
     if evidence:
         sample = pd.DataFrame(bn.randomsample(10 * n, evidence=evidence))
-        cont_nodes = []
-        for key in bn.nodes.keys():
-            if (str(type(bn.nodes[key])).split('.')[1] == 'lg') | (str(type(bn.nodes[key])).split('.')[1] == 'lgandd'):
-                cont_nodes.append(key)
         sample.dropna(inplace=True)
-        sample = sample.loc[(sample.loc[:, cont_nodes].values >= 0).all(axis=1)]
+        sample = sample.loc[(sample.loc[:, ['age']].values >= 0).all(axis=1)]
         sample.reset_index(inplace=True, drop=True)
     else:
         sample = pd.DataFrame(bn.randomsample(10 * n))
-        cont_nodes = []
-        for key in bn.nodes.keys():
-            if (str(type(bn.nodes[key])).split('.')[1] == 'lg') | (str(type(bn.nodes[key])).split('.')[1] == 'lgandd'):
-                cont_nodes.append(key)
         sample.dropna(inplace=True)
-        sample = sample.loc[(sample.loc[:, cont_nodes].values >= 0).all(axis=1)]
+        sample = sample.loc[(sample.loc[:, ['age']].values >= 0).all(axis=1)]
         sample.reset_index(inplace=True, drop=True)
 
 
