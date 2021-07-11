@@ -101,6 +101,7 @@ def main():
         else:
             bn = sample(final_bn, age = age, gender = gen)
         res = sam(bn)
+        res
         res1 = res
         #bn.T.iloc[:,4:-1]
         for rec in np.array_split(res,3):
