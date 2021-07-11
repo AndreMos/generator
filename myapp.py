@@ -101,7 +101,7 @@ def main():
         else:
             bn = sample(final_bn, age = age, gender = gen)
         res = sam(bn)
-        res
+        #res
         res1 = res
         #bn.T.iloc[:,4:-1]
         for rec in np.array_split(res,3):
@@ -110,7 +110,7 @@ def main():
             educ = dicti_educ[rec['has_high_education'].iloc[0]]
             #rec
             fam = dicti_fam[rec['relation'].iloc[0]]
-            rec
+            #rec
             #inter = rec.iloc[0,5:-1].sort_values( ascending = False)[:3].index.values
             inter = [rec['top1_interest'].iloc[0], rec['top2_interest'].iloc[0], rec['top3_interest'].iloc[0]]
             #inter2 =
