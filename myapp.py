@@ -111,7 +111,10 @@ def main():
             #rec
             fam = dicti_fam[rec['relation'].iloc[0]]
             rec
-            inter = rec.iloc[0,5:-1].sort_values( ascending = False)[:3].index.values
+            #inter = rec.iloc[0,5:-1].sort_values( ascending = False)[:3].index.values
+            inter = [rec['top1_interest'].iloc[0], rec['top2_interest'].iloc[0], rec['top3_interest'].iloc[0]]
+            #inter2 =
+            #inter3 =
             gender = dicti_gen[rec['sex'].iloc[0]]
 
             #inter
