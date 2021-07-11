@@ -109,6 +109,7 @@ def main():
             educ = dicti_educ[rec['has_high_education'].iloc[0]]
             #rec
             fam = dicti_fam[rec['relation'].iloc[0]]
+            rec
             inter = rec.iloc[0,5:-1].sort_values( ascending = False)[:3].index.values
             gender = dicti_gen[rec['sex'].iloc[0]]
 
