@@ -5,3 +5,4 @@ Pillow
 scikit-image
 tensorflow==1.15
 gdown==3.12.2
+os
